@@ -43,4 +43,4 @@ State.getClient().on('message', message => {
 });
 
 // Log our bot in using the token from https://discordapp.com/developers/applications/me
-State.getClient().login('NjYyNjQ3NzE4Mjg3NjM4NTQ4.Xi1K0g.1vOrgHt-VPDmNlxXiiwA_pJDvgI');
+State.getClient().login(process.env.DISCORD_TOKEN);
