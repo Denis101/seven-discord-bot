@@ -1,6 +1,8 @@
 let _client = null;
 let _message = null;
-let _teams = [];
+
+// hardcode for now
+let _teams = ['EU', 'NA'];
 
 const State = {
     getClient: () => _client,
