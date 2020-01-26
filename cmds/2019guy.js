@@ -8,6 +8,9 @@ module.exports = () => {
         State.getMessage().channel.send('I don\'t have permissions to join the channel :(');
     }
 
-    chan.join();
-    State.getMessage().channel.send('-play https://www.youtube.com/watch?v=4SiiRx7GDzI');
+    chan.join().then(() => {
+        State.getMessage().channel.send('-play https://www.youtube.com/watch?v=4SiiRx7GDzI'); 
+    }).catch(e => {
+        console.error(e);
+    });
 };

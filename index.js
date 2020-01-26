@@ -3,6 +3,8 @@ const fs = require('fs');
 const Discord = require('discord.js');
 const State = require('./state.js');
 
+process.on('unhandledRejection', console.error);
+
 State.setClient(new Discord.Client());
 
 const getUserRef = id => {
