@@ -15,5 +15,5 @@ module.exports = args => {
     }
 
     args.shift();
-    require(cmdFile)(args);
+    require(cmdFile).handler(args);
 };
