@@ -16,14 +16,7 @@ const getRaidRole = member => {
 };
 
 module.exports = () => {
-    State.getClient().guilds.forEach(g => {
-        g.members.forEach(m => {
-            const raidRole = getRaidRole(m);
-            if (raidRole === null) {
-                return;
-            }
-
-            m.send(ROLE_MSGS[raidRole]);
-        });
-    });
+    const g = State.getMessage().guild;
+    g.members.filter(m => getRaidRole(m) !== null)
+        .forEach(m => m.send(ROLE_MSGS[getRaidRole(m)]));
 };
