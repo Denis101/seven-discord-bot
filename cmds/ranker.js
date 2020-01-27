@@ -1,3 +1,4 @@
+const { RichEmbed } = require('discord.js');
 const { message } = require('../selectors');
 
 // Super secret command :)
