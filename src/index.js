@@ -4,13 +4,14 @@ const Discord = require('discord.js');
 const { Pool } = require('pg');
 
 const { userIsReferenced } = require('./utils/userUtils.js');
+const { createErrorEmbed } = require('./utils/messageUtils.js');
 const { ready, discordClient, dbClient, message } = require('./selectors');
 const { setReady, setDiscordClient, setDbClient, setMessage } = require('./actions');
 const { parse } = require('./commandParser.js');
 
 const HELP_DATA = {
     title: '@Laty <command>',
-    description: 'I am the ultimate rage management tool',
+    description: 'I am the ultimate raid management tool',
     fields: [
         {
             title: '**Available Commands**',
@@ -55,6 +56,7 @@ discordClient().on('message', msg => {
         return;
     }
 
+    console.log(`Received command [${msg.content}] from [${msg.author.username}]`);
     setMessage(msg);
     parse(msg.content, HELP_DATA).execute();
 });
@@ -65,12 +67,16 @@ const exitHandler = () => {
     dbClient() && dbClient().release();
 }
 
-process.on('exit', exitHandler.bind(null,{cleanup:true}));
+const errorHandler = e => {
+    message() && message().channel.send(createErrorEmbed({
+        title: '**I\'m afraid my wires got crossed**, so I can\'t do what you asked.',
+        description: e,
+    }));
 
-process.on('uncaughtException', exitHandler.bind(null, {exit:true}));
-
-process.on('unhandledRejection', e => {
-    message() && message().channel.send(e);
     console.error(e);
     exitHandler.bind(null, {exit:true});
-});
+}
+
+process.on('exit', exitHandler.bind(null,{cleanup:true}));
+process.on('uncaughtException', errorHandler);
+process.on('unhandledRejection', errorHandler);

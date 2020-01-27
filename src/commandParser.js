@@ -47,7 +47,20 @@ const authenticate = (cmd, next) => {
     }
 };
 
-const getChainLink = (cmd, args) => {
+const printLinkLevel = x => {
+    let s = '';
+    for (let i = 0; i < x; i++) {
+        s += '-';
+    }
+    return s + '>';
+}
+
+const getChainLink = (name, index, cmd, args) => {
+    const execHandler = function() {
+        console.log(`${printLinkLevel(index)} ${name}`);
+        this.handler(this.next);
+    }
+
     let link = {
         help: cmd.help,
     };
@@ -58,20 +71,14 @@ const getChainLink = (cmd, args) => {
             help: cmd.help,
         }
 
-        link.next.execute = function() {
-            this.handler(this.next);
-        }
-
+        link.next.execute = execHandler;
         link.next.execute.bind(link.next);
         link.handler = next => authenticate(cmd, next);
     } else {
         link.handler = next => cmd.handler(args, next);
     }
 
-    link.execute = function() {
-        this.handler(this.next);
-    }
-
+    link.execute = execHandler;
     link.execute.bind(link);
     return link;
 };
@@ -79,9 +86,10 @@ const getChainLink = (cmd, args) => {
 const parse = (input, rootHelpData) => {
     let cmds = commands();
     const args = input.trim().split(' ').map(a => a.trim());
-    const isHelp = args[args.length - 1] === 'help';
+    const isHelp = args.length == 0 || args[args.length - 1] === 'help';
     if (isHelp) {
-        if (args.length == 1) {
+        if (args.length <= 1) {
+            console.log('> help');
             const msg = createHelpMessage(rootHelpData)
             const sender = message().channel.send;
             return { execute: () => sender(msg) };
@@ -100,7 +108,7 @@ const parse = (input, rootHelpData) => {
         throw 'Invalid command';
     }
 
-    const chainRoot = getChainLink(cmds[rootCmd], [...shiftedArgs], isHelp);
+    const chainRoot = getChainLink(rootCmd, 0, cmds[rootCmd], [...shiftedArgs]);
     let current = chainRoot;
     cmds = cmds[rootCmd].children;
 
@@ -115,7 +123,7 @@ const parse = (input, rootHelpData) => {
             current = current.next;
         }
 
-        current.next = getChainLink(cmds[inputCmd], [...shiftedArgs]);
+        current.next = getChainLink(inputCmd, i, cmds[inputCmd], [...shiftedArgs]);
         current = current.next;
 
         cmds = cmds[inputCmd].children;

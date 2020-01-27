@@ -53,7 +53,7 @@ module.exports = {
     handler: args => {
         const name = args[0];
         const currentRaid = name ? raid(name) : nextRaid();
-        if (!raid) {
+        if (!currentRaid) {
             message().channel.send('No raids configured. Create raid with @Laty raid create');
             return;
         }
