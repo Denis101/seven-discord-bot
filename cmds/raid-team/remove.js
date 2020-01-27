@@ -1,8 +1,8 @@
-const State = require('../../state.js');
+const { message } = require('../../selectors');
 
 module.exports = {
     name: 'remove',
     handler: () => {
-        State.getMessage().channel.send('TODO: Implement this');
-    }
-}
+        message().channel.send('Not yet implemented.');
+    },
+};

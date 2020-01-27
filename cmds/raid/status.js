@@ -1,5 +1,5 @@
 const { RichEmbed } = require('discord.js');
-const State = require('../../state.js');
+const { guild, message } = require('../../selectors');
 const { hasRole, getRaidRole, getTeam } = require('../../roleUtils.js');
 
 const CLASS_MAP = {
@@ -31,17 +31,15 @@ module.exports = {
             .setTimestamp()
             .setColor(0x0000FF);
 
-        const g = State.getMessage().guild;
-
         let team = [];
         if (args[0]) {
             msg.setTitle('RAID STATUS - ' + args[0]);
             team = getTeam(g.members, team);
         } else {
-            team = g.members;
+            team = guild().members;
         }
         
-        g.members.forEach(m => {
+        guild().members.forEach(m => {
             const nickname = m.nickname || m.user.username;
             const raidRole = getRaidRole(m);
             if (raidRole === null) {
@@ -59,6 +57,6 @@ module.exports = {
             }
         });
 
-        State.getMessage().channel.send(msg);
+        message().channel.send(msg);
     },
 };

@@ -1,8 +1,5 @@
-const State = require('../../state.js');
+const { message, teams } = require('../../selectors');
 
 module.exports = {
-    name: 'list',
-    handler: () => {
-        State.getMessage().channel.send(State.getTeams());
-    }
-}
+    handler: () => message().channel.send(teams()),
+};

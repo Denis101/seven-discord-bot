@@ -1,16 +1,18 @@
+const { guild, message } = require('../selectors');
 
-const State = require('../state.js');
+// Super secret command :)
+module.exports = {
+    name: '2019guy',
+    handler: () => {
+        const chan = guild().channels.find(c => c.name === "Just Chatting");
+        if (!chan.joinable) {
+            message().channel.send('I don\'t have permissions to join the voice channel :(');
+        }
 
-module.exports = () => {
-    const g = State.getClient().guilds.first();
-    const chan = g.channels.find(c => c.name === "Just Chatting");
-    if (!chan.joinable) {
-        State.getMessage().channel.send('I don\'t have permissions to join the channel :(');
-    }
-
-    chan.join().then(() => {
-        State.getMessage().channel.send('-play https://www.youtube.com/watch?v=4SiiRx7GDzI'); 
-    }).catch(e => {
-        console.error(e);
-    });
+        chan.join().then(() => {
+            message().channel.send('-play https://www.youtube.com/watch?v=4SiiRx7GDzI'); 
+        }).catch(e => {
+            console.error(e);
+        });
+    },
 };

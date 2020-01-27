@@ -1,9 +1,6 @@
-const State = require('../../state.js');
+const { addTeam } = require('../../actions');
+const { guild } = require('../../selectors');
 
 module.exports = {
-    name: 'add',
-    handler: args => {
-        const g = State.getMessage().guild;
-        State.addTeam(g.roles.find(r => r.name === args[0]).id);
-    }
-}
+    handler: args => addTeam(guild().roles.find(r => r.name === args[0]).id),
+};
