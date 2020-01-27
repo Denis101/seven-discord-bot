@@ -25,6 +25,16 @@ const EMOJI_MAP = {
 }
 
 module.exports = {
+    help: {
+        title: '@Laty raid status <name>',
+        description: 'Command to print the status of all raiders for a given raid.',
+        fields: [
+            {
+                title: 'Example',
+                description: '@Laty raid status molten-core',
+            },
+        ],
+    },
     handler: args => {
         const msg = new RichEmbed()
             .setTitle('RAID STATUS')

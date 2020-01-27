@@ -1,5 +1,6 @@
 const fs = require('fs');
-const { message } = require('./selectors');
+const { RichEmbed } = require('discord.js');
+const { message, guild } = require('./selectors');
 
 const build = cmdDef => {
     const cmd = {
@@ -37,17 +38,23 @@ const commands = () => {
 };
 
 const authenticate = (cmd, next) => {
-    if (cmd.authenticator(message().author)) {
+    const user = guild().members.find(m => m.id === message().author.id);
+    if (cmd.authenticator(user)) {
         next();
+    } else {
+        message().channel.send("Sorry, you're not allowed to do that.");
     }
 };
 
 const getChainLink = (cmd, args) => {
-    let link = {};
+    let link = {
+        help: cmd.help,
+    };
 
     if (cmd.authenticator) {
         link.next = {
             handler: next => cmd.handler(args, next),
+            help: cmd.help,
         }
 
         link.next.execute = function() {
@@ -71,6 +78,10 @@ const getChainLink = (cmd, args) => {
 const parse = input => {
     let cmds = commands();
     const args = input.trim().split(' ');
+    const isHelp = args[args.length - 1] === 'help';
+    if (isHelp) {
+        args.pop();
+    }
 
     // First arg is always the root cmd
     args.shift();
@@ -82,16 +93,16 @@ const parse = input => {
         throw 'Invalid command';
     }
 
-    const chainRoot = getChainLink(cmds[rootCmd], [...shiftedArgs]);
+    const chainRoot = getChainLink(cmds[rootCmd], [...shiftedArgs], isHelp);
     let current = chainRoot;
     cmds = cmds[rootCmd].children;
 
     for (let i = 1; i < args.length; i++) {
         const inputCmd = shiftedArgs.shift();
-        if (!cmds[inputCmd]) {
+        if (!cmds || !cmds[inputCmd]) {
             break;
         }
-        
+
         // Has an authenticator, move to next chain link
         if (current.next) {
             current = current.next;
@@ -101,6 +112,30 @@ const parse = input => {
         current = current.next;
 
         cmds = cmds[inputCmd].children;
+    }
+
+    if (isHelp) {
+        let current = chainRoot;
+        while (current != null) {
+            if (current.next == null) {
+                const embed = new RichEmbed()
+                    .setTitle(current.help.title)
+                    .setDescription(current.help.description)
+                    .setColor(0x000000);
+
+                if (current.help.fields && current.help.fields.length > 0) {
+                    current.help.fields.forEach(f => {
+                        embed.addField(f.title, f.description, f.inline || false);
+                    });
+                }
+
+                current.handler = () => message().channel.send(embed);
+            } else {
+                current.handler = next => next.execute();
+            }
+
+            current = current.next;
+        }
     }
 
     return chainRoot;
