@@ -6,7 +6,16 @@ module.exports = {
     directory: __dirname + '/raid',
     handler: (args, next) => {
         if (args.length < 1) {
-            message().channel.send('Missing subcommand for raid command');
+            message().channel.send(`
+raid: missing subcommand
+
+Available subcommands:
+- create
+- invite
+- set-day
+- set-time
+- status
+`);
             return;
         }
 

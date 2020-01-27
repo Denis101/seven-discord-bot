@@ -1,13 +1,17 @@
 const store = require('../store.js');
 
 module.exports = {
+    setReady: () => store.dispatch({
+        type: 'READY_SET',
+        ready: true,
+    }),
     setClient: client => store.dispatch({
         type: 'CLIENT_SET',
         client,
     }),
-    setMessage: client => store.dispatch({
+    setMessage: message => store.dispatch({
         type: 'MESSAGE_SET',
-        client,
+        message,
     }),
     addTeam: team => store.dispatch({
         type: 'TEAM_ADD',

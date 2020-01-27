@@ -34,13 +34,13 @@ const commands = () => {
             result[cmd.name || f.replace('.js', '')] = cmd;
         });
     return result;
-}
+};
 
 const authenticate = (cmd, next) => {
     if (cmd.authenticator(message().author)) {
         next();
     }
-}
+};
 
 const getChainLink = (cmd, args) => {
     let link = {};
@@ -66,7 +66,7 @@ const getChainLink = (cmd, args) => {
 
     link.execute.bind(link);
     return link;
-}
+};
 
 const parse = input => {
     let cmds = commands();
@@ -82,7 +82,7 @@ const parse = input => {
         throw 'Invalid command';
     }
 
-    const chainRoot = getChainLink(cmds[rootCmd], shiftedArgs);
+    const chainRoot = getChainLink(cmds[rootCmd], [...shiftedArgs]);
     let current = chainRoot;
     cmds = cmds[rootCmd].children;
 
@@ -91,18 +91,14 @@ const parse = input => {
         if (!cmds[inputCmd]) {
             break;
         }
-
-        if (current === null) {
-            current = getChainLink(cmds[inputCmd], shiftedArgs)
-        } else {
-            // Has an authenticator, move to next chain link
-            if (current.next) {
-                current = current.next;
-            }
-
-            current.next = getChainLink(cmds[inputCmd], shiftedArgs);
+        
+        // Has an authenticator, move to next chain link
+        if (current.next) {
             current = current.next;
         }
+
+        current.next = getChainLink(cmds[inputCmd], [...shiftedArgs]);
+        current = current.next;
 
         cmds = cmds[inputCmd].children;
     }
