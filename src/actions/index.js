@@ -1,12 +1,18 @@
 const store = require('../store.js');
+const memberActions = require('./members.js');
 
 module.exports = {
+    ...memberActions,
     setReady: () => store.dispatch({
         type: 'READY_SET',
         ready: true,
     }),
-    setClient: client => store.dispatch({
-        type: 'CLIENT_SET',
+    setDbClient: client => store.dispatch({
+        type: 'DB_CLIENT_SET',
+        client,
+    }),
+    setDiscordClient: client => store.dispatch({
+        type: 'DISCORD_CLIENT_SET',
         client,
     }),
     setMessage: message => store.dispatch({

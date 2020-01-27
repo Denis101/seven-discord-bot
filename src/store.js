@@ -1,7 +1,7 @@
 const fs = require('fs');
 const { createStore } = require('redux');
 
-const reducerFolder = `${process.cwd()}/reducers`;
+const reducerFolder = `${process.cwd()}/src/reducers`;
 let reducers = null;
 
 const rootReducer = (state = {}, action) => {

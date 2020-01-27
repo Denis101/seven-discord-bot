@@ -86,11 +86,11 @@ module.exports = {
             else if (hasRole(m, 'Healer')) {
                 healers.push(nickname);
             }
-            else if (RANGED_DPS.includes(raidRole)) {
-                rangedDps++;
-            }
             else if (MELEE_DPS.includes(raidRole)) {
                 meleeDps++;
+            }
+            else if (RANGED_DPS.includes(raidRole)) {
+                rangedDps++;
             }
 
             const signUpStatus = ':red_circle:';
@@ -103,7 +103,7 @@ module.exports = {
         msg.addField('**__Raid Leader__**', raidLeader);
         tanks.length > 0 && msg.addField(`**__Tanks__** (${tanks.length})`, tanks.join('\n'), true);
         healers.length > 0 && msg.addField(`**__Healers__** (${healers.length})`, healers.join('\n'), true);
-        msg.addField(`**__DPS__** (${healers.length})`, `**Melee**: ${meleeDps}\n**Ranged**: ${rangedDps}`, true);
+        msg.addField(`**__DPS__**`, `**Melee**: ${meleeDps}\n**Ranged**: ${rangedDps}`, true);
         msg.addBlankField();
 
         Object.keys(CLASS_MAP).forEach(cls => {

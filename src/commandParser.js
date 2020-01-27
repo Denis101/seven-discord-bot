@@ -28,10 +28,10 @@ const build = cmdDef => {
 
 const commands = () => {
     const result = [];
-    fs.readdirSync(`${process.cwd()}/cmds`)
+    fs.readdirSync(`${process.cwd()}/src/cmds`)
         .filter(f => f.endsWith('.js'))
         .forEach(f => {
-            const cmd = build(require(`${process.cwd()}/cmds/${f}`));
+            const cmd = build(require(`${process.cwd()}/src/cmds/${f}`));
             result[cmd.name || f.replace('.js', '')] = cmd;
         });
     return result;
