@@ -3,6 +3,20 @@ const { guild, message, raid, nextRaid } = require('../../selectors');
 const { hasRole, getRaidRole, getMembersInTeam } = require('../../roleUtils.js');
 const { getNickname } = require('../../userUtils.js');
 
+const RANGED_DPS = [
+    'Warlock',
+    'Mage',
+    'Hunter',
+    'Druid',
+    'Priest',
+];
+
+const MELEE_DPS = [
+    'Warrior',
+    'Rogue',
+    'Paladin',
+]
+
 const CLASS_MAP = {
     'Warlock': [],
     'Priest': [],
@@ -52,6 +66,8 @@ module.exports = {
         let raidLeader = null;
         const tanks = [];
         const healers = [];
+        const rangedDps = 0;
+        const meleeDps = 0;
         
         team.forEach(m => {
             const nickname = getNickname(m);
@@ -65,11 +81,16 @@ module.exports = {
             }
 
             if (hasRole(m, 'Tank')) {
-                tanks.push(nickname)
+                tanks.push(nickname);
             }
-
-            if (hasRole(m, 'Healer')) {
-                healers.push(nickname)
+            else if (hasRole(m, 'Healer')) {
+                healers.push(nickname);
+            }
+            else if (RANGED_DPS.includes(raidRole)) {
+                rangedDps++;
+            }
+            else if (MELEE_DPS.includes(raidRole)) {
+                meleeDps++;
             }
 
             const signUpStatus = ':red_circle:';
@@ -79,14 +100,15 @@ module.exports = {
             });
         });
 
-        msg.addField('**Raid Leader**', raidLeader);
-        tanks.length > 0 && msg.addField(`**Tanks** (${tanks.length})`, tanks.join('\n'), true);
-        healers.length > 0 && msg.addField(`**Healers** (${healers.length})`, healers.join('\n'), true);
+        msg.addField('**__Raid Leader__**', raidLeader);
+        tanks.length > 0 && msg.addField(`**__Tanks__** (${tanks.length})`, tanks.join('\n'), true);
+        healers.length > 0 && msg.addField(`**__Healers__** (${healers.length})`, healers.join('\n'), true);
+        msg.addField(`**__DPS__** (${healers.length})`, `**Melee**: ${meleeDps}\n**Ranged**: ${rangedDps}`, true);
         msg.addBlankField();
 
         Object.keys(CLASS_MAP).forEach(cls => {
             if (CLASS_MAP[cls].length > 0) {
-                msg.addField(`${EMOJI_MAP[cls]} - **${cls}** (${CLASS_MAP[cls].length})`, CLASS_MAP[cls].join('\n'), true);
+                msg.addField(`${EMOJI_MAP[cls]} - **__${cls}__** (${CLASS_MAP[cls].length})`, CLASS_MAP[cls].join('\n'), true);
             }
         });
 
