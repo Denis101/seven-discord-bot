@@ -1,3 +1,6 @@
+const { message, raid, raidExists } = require('../../selectors');
+const { createRaid, updateRaid } = require('../../actions');
+const { guildLeader } = require('../../authenticators.js');
 
 module.exports = {
     help: {
@@ -21,6 +24,24 @@ module.exports = {
             },
         ],
     },
-    handler: () => {
+    handler: args => {
+        const name = args[0];
+        const time = args[1];
+
+        if (!name) {
+            message().channel.send("Can't set time, no raid name provided.");
+        }
+
+        if (!raidExists(name)) {
+            message().channel.send(`Can't set time of __${name}__ raid,  it doesn't exist!`);
+            return;
+        }
+
+        updateRaid(name, {
+            ...raid(name),
+            time,
+        });
+
+        message().channel.send(`**Work complete**`);
     },
 };

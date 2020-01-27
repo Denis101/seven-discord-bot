@@ -1,6 +1,7 @@
 const { RichEmbed } = require('discord.js');
-const { guild, message } = require('../../selectors');
-const { hasRole, getRaidRole, getTeam } = require('../../roleUtils.js');
+const { guild, message, raid, nextRaid } = require('../../selectors');
+const { hasRole, getRaidRole, getMembersInTeam } = require('../../roleUtils.js');
+const { getNickname } = require('../../userUtils.js');
 
 const CLASS_MAP = {
     'Warlock': [],
@@ -36,34 +37,55 @@ module.exports = {
         ],
     },
     handler: args => {
-        const msg = new RichEmbed()
-            .setTitle('RAID STATUS')
-            .setTimestamp()
-            .setColor(0x0000FF);
-
-        let team = [];
-        if (args[0]) {
-            msg.setTitle('RAID STATUS - ' + args[0]);
-            team = getTeam(g.members, team);
-        } else {
-            team = guild().members;
+        const name = args[0];
+        const currentRaid = name ? raid(name) : nextRaid();
+        if (!raid) {
+            message().channel.send('No raids configured. Create raid with @Laty raid create');
+            return;
         }
+
+        let team = getMembersInTeam(guild().members, currentRaid.team);
+
+        const msg = new RichEmbed().setColor(0x000000)
+            .setTitle(`**${currentRaid.description ? currentRaid.description : currentRaid.name}**`);
+
+        let raidLeader = null;
+        const tanks = [];
+        const healers = [];
         
-        guild().members.forEach(m => {
-            const nickname = m.nickname || m.user.username;
+        team.forEach(m => {
+            const nickname = getNickname(m);
             const raidRole = getRaidRole(m);
             if (raidRole === null) {
                 return;
             }
 
+            if (hasRole(m, 'Raid Leader')) {
+                raidLeader = nickname;
+            }
+
+            if (hasRole(m, 'Tank')) {
+                tanks.push(nickname)
+            }
+
+            if (hasRole(m, 'Healer')) {
+                healers.push(nickname)
+            }
+
+            const signUpStatus = ':red_circle:';
+
             Object.keys(CLASS_MAP).filter(cls => hasRole(m, cls)).forEach(cls => {
-                CLASS_MAP[cls].push(nickname + ' - ' + raidRole);
+                CLASS_MAP[cls].push(`${signUpStatus}   -   ${nickname}`);
             });
         });
 
+        msg.addField('**Raid Leader**', raidLeader);
+        tanks.length > 0 && msg.addField(`**Tanks** (${tanks.length})`, tanks.join('\n'), true);
+        healers.length > 0 && msg.addField(`**Healers** (${healers.length})`, healers.join('\n'), true);
+
         Object.keys(CLASS_MAP).forEach(cls => {
             if (CLASS_MAP[cls].length > 0) {
-                msg.addField(`${EMOJI_MAP[cls]} ${cls}(s) [${CLASS_MAP[cls].length}]`, CLASS_MAP[cls].join('\n'));
+                msg.addField(`${EMOJI_MAP[cls]} - **${cls}** (${CLASS_MAP[cls].length})`, CLASS_MAP[cls].join('\n'), true);
             }
         });
 

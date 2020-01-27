@@ -40,7 +40,7 @@ const commands = () => {
 const authenticate = (cmd, next) => {
     const user = guild().members.find(m => m.id === message().author.id);
     if (cmd.authenticator(user)) {
-        next();
+        next.execute();
     } else {
         message().channel.send("Sorry, you're not allowed to do that.");
     }
@@ -77,7 +77,7 @@ const getChainLink = (cmd, args) => {
 
 const parse = input => {
     let cmds = commands();
-    const args = input.trim().split(' ');
+    const args = input.trim().split(' ').map(a => a.trim());
     const isHelp = args[args.length - 1] === 'help';
     if (isHelp) {
         args.pop();

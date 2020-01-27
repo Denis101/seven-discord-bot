@@ -4,22 +4,24 @@ const ROLE_MSGS = {
     "Trial Raider": "Baby Rat, sign up for raid pls.",
 };
 
+const hasRole = (member, name) => member.roles.map(r => r.name).includes(name);
+
+const getRaidRole = member => {
+    const keys = Object.keys(ROLE_MSGS).filter(role => (member.roles.map(r => r.name) || []).includes(role));
+    if (!keys || keys.length === 0) {
+        return null;
+    }
+
+    return keys[0];
+};
+
 module.exports = {
-    hasRole: (member, name) => {
-        return member.roles.map(r => r.name).includes(name);
-    },
-    getRaidRole: member => {
-        const keys = Object.keys(ROLE_MSGS).filter(role => (member.roles.map(r => r.name) || []).includes(role));
-        if (!keys || keys.length === 0) {
-            return null;
-        }
-    
-        return keys[0];
-    },
-    getRaidRoleMessage: member => {
+    hasRole,
+    getRaidRole,
+    getRaidRoleMessage: m => {
         return ROLE_MSGS[getRaidRole(m)];
     },
-    getTeam:(members, team) => {
+    getMembersInTeam: (members, team) => {
         return members.filter(m => hasRole(m, team));
     },
 };

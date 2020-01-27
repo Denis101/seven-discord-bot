@@ -47,6 +47,6 @@ module.exports = {
             day,
         });
 
-        message().channel.send(`Created new raid: ${raid().name}`);
-    }
+        message().channel.send(`**Work complete**, created new raid __${name}__`);
+    },
 }

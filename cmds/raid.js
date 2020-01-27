@@ -12,11 +12,6 @@ module.exports = {
                 inline: false,
             },
             {
-                title: '__add-team__',
-                description: 'Adds a team to a given raid.',
-                inline: true
-            },
-            {
                 title: '__create__',
                 description: 'Creates a new raid.',
                 inline: true
@@ -32,8 +27,18 @@ module.exports = {
                 inline: true
             },
             {
+                title: '__set-team__',
+                description: 'Sets the team of a given raid.',
+                inline: true
+            },
+            {
                 title: '__set-time__',
                 description: 'Sets the time when this raid occurs (Faerlina Server Time).',
+                inline: true
+            },
+            {
+                title: '__set-description',
+                description: 'Sets the description of this raid.',
                 inline: true
             },
             {
