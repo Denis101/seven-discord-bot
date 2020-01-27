@@ -1,3 +1,4 @@
+const { createSuccessEmbed, createFailureEmbed } = require('../../utils/messageUtils.js');
 const { message, raid, raidExists } = require('../../selectors');
 const { updateRaid } = require('../../actions');
 const { guildLeader } = require('../../authenticators.js');
@@ -20,11 +21,11 @@ module.exports = {
         const description = args[1];
 
         if (!name) {
-            message().channel.send("Can't set description, no raid name provided.");
+            message().channel.send(createFailureEmbed("Can't set description, no raid name provided."));
         }
 
         if (!raidExists(name)) {
-            message().channel.send(`Can't set description of __${name}__ raid,  it doesn't exist!`);
+            message().channel.send(createFailureEmbed(`Can't set description of __${name}__ raid, it doesn't exist!`));
             return;
         }
 
@@ -33,6 +34,6 @@ module.exports = {
             description,
         });
 
-        message().channel.send(`**Work complete**`);
+        message().channel.send(createSuccessEmbed(`Set description of __${name}__ to __${description}__`));
     },
 };

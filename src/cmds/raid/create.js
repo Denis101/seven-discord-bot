@@ -1,3 +1,4 @@
+const { createSuccessEmbed, createFailureEmbed } = require('../../utils/messageUtils.js');
 const { message, raidExists } = require('../../selectors');
 const { createRaid } = require('../../actions');
 const { guildLeader } = require('../../authenticators.js');
@@ -26,26 +27,20 @@ module.exports = {
         const time = args[2];
 
         if (!name) {
-            message().channel.send('**Houston, we have a problem**, a name is required to create a raid.');
+            message().channel.send(createFailureEmbed('A name is required to create a raid.'));
         }
 
         if (raidExists(name)) {
-            message().channel.send('**Houston, we have a problem**, A raid with this name already exists. Did you mean \'@Laty raid update\'?');
+            message().channel.send(createFailureEmbed('A raid with this name already exists. Did you mean \'@Laty raid update\'?'));
             return;
         }
 
-        try {
-            createRaid({
-                name,
-                day,
-                time,
-            });
-        }
-        catch (e) {
-            message().channel.send('**Work failed**, looks like something went wrong on my end. Oopsies.');
-            return;
-        }
-        
-        message().channel.send(`**Work complete**, created new raid __${name}__`);
+        await createRaid({
+            name,
+            day,
+            time,
+        });
+
+        message().channel.send(createSuccessEmbed(`Created new raid __${name}__`));
     },
 }

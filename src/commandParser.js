@@ -1,7 +1,6 @@
 const fs = require('fs');
-const { RichEmbed } = require('discord.js');
 const { message, guild } = require('./selectors');
-const { createHelpMessage } = require('./utils/messageUtils.js');
+const { createHelpEmbed, createFailureEmbed } = require('./utils/messageUtils.js');
 
 const build = cmdDef => {
     const cmd = {
@@ -43,12 +42,15 @@ const authenticate = (cmd, next) => {
     if (cmd.authenticator(user)) {
         next.execute();
     } else {
-        message().channel.send("Sorry, you're not allowed to do that.");
+        message().channel.send(createFailureEmbed({
+            title: "Sorry, you're not allowed to do that.",
+            description: "Looks like you're lacking the necessary role to perform this action. Talk to your Discord server manager to sort that out."
+        }));
     }
 };
 
 const printLinkLevel = x => {
-    let s = '';
+    let s = '-';
     for (let i = 0; i < x; i++) {
         s += '-';
     }
@@ -69,7 +71,7 @@ const getChainLink = (name, index, cmd, args) => {
         link.next = {
             handler: next => cmd.handler(args, next),
             help: cmd.help,
-        }
+        };
 
         link.next.execute = execHandler;
         link.next.execute.bind(link.next);
@@ -90,7 +92,7 @@ const parse = (input, rootHelpData) => {
     if (isHelp) {
         if (args.length <= 1) {
             console.log('> help');
-            const msg = createHelpMessage(rootHelpData)
+            const msg = createHelpEmbed(rootHelpData)
             const sender = message().channel.send;
             return { execute: () => sender(msg) };
         }
@@ -133,7 +135,7 @@ const parse = (input, rootHelpData) => {
         let current = chainRoot;
         while (current != null) {
             if (current.next == null) {
-                const embed = createHelpMessage(current.help);
+                const embed = createHelpEmbed(current.help);
                 current.handler = () => message().channel.send(embed);
             } else {
                 current.handler = next => next.execute();

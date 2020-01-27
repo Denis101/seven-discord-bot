@@ -1,4 +1,5 @@
 const { RichEmbed } = require('discord.js');
+const { createFailureEmbed } = require('../../utils/messageUtils.js');
 const { guild, message, raid, nextRaid } = require('../../selectors');
 const { hasRole, getRaidRole, getMembersInTeam } = require('../../utils/roleUtils.js');
 const { getNickname } = require('../../utils/userUtils.js');
@@ -54,7 +55,7 @@ module.exports = {
         const name = args[0];
         const currentRaid = name ? raid(name) : nextRaid();
         if (!currentRaid) {
-            message().channel.send('No raids configured. Create raid with @Laty raid create');
+            message().channel.send(createFailureEmbed('No raids configured. Create raid with @Laty raid create'));
             return;
         }
 

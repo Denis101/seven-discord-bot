@@ -1,8 +1,10 @@
+const { createSuccessEmbed, createFailureEmbed } = require('../../utils/messageUtils.js');
 const { message, raid, raidExists } = require('../../selectors');
-const { createRaid, updateRaid } = require('../../actions');
+const { updateRaid } = require('../../actions');
 const { guildLeader } = require('../../authenticators.js');
 
 module.exports = {
+    authenticator: guildLeader,
     help: {
         title: '@Laty raid set-time <name> <time>',
         description: 'Command to update the time during a 24hr period when the raid will start.',
@@ -29,11 +31,11 @@ module.exports = {
         const time = args[1];
 
         if (!name) {
-            message().channel.send("Can't set time, no raid name provided.");
+            message().channel.send(createFailureEmbed("Can't set time, no raid name provided."));
         }
 
         if (!raidExists(name)) {
-            message().channel.send(`Can't set time of __${name}__ raid,  it doesn't exist!`);
+            message().channel.send(createFailureEmbed(`Can't set time of __${name}__ raid,  it doesn't exist!`));
             return;
         }
 
@@ -42,6 +44,6 @@ module.exports = {
             time,
         });
 
-        message().channel.send(`**Work complete**`);
+        message().channel.send(createSuccessEmbed(`Set team of __${name}__ to __${time}__`));
     },
 };

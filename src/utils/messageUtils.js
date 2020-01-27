@@ -1,6 +1,6 @@
 const { RichEmbed } = require('discord.js');
 
-const createHelpMessage = help => {
+const createHelpEmbed = help => {
     const embed = new RichEmbed()
                     .setTitle(help.title)
                     .setDescription(help.description)
@@ -15,6 +15,20 @@ const createHelpMessage = help => {
     return embed;
 }
 
+const createSuccessEmbed = msg => {
+    return new RichEmbed()
+        .setTitle('**Work complete**')
+        .setDescription(msg)
+        .setColor(0x00FF00);
+}
+
+const createFailureEmbed = msg => {
+    return new RichEmbed()
+        .setTitle('**Houston, we have a problem**')
+        .setDescription(msg)
+        .setColor(0xFF0000);
+}
+
 const createErrorEmbed = e => {
     return new RichEmbed()
         .setTitle(e.title)
@@ -24,6 +38,8 @@ const createErrorEmbed = e => {
 }
 
 module.exports = {
-    createHelpMessage,
+    createHelpEmbed,
+    createSuccessEmbed,
+    createFailureEmbed,
     createErrorEmbed,
 };

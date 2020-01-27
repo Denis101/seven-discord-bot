@@ -1,6 +1,6 @@
 const { createTransaction } = require('../transaction.js');
 
-const createRaid = raid => {
+const createRaid = async raid => {
     return async dispatch => {
         let rowsSql = 'display_name';
         let values = [name];
