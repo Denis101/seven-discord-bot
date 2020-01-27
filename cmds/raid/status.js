@@ -82,6 +82,7 @@ module.exports = {
         msg.addField('**Raid Leader**', raidLeader);
         tanks.length > 0 && msg.addField(`**Tanks** (${tanks.length})`, tanks.join('\n'), true);
         healers.length > 0 && msg.addField(`**Healers** (${healers.length})`, healers.join('\n'), true);
+        msg.addBlankField();
 
         Object.keys(CLASS_MAP).forEach(cls => {
             if (CLASS_MAP[cls].length > 0) {
