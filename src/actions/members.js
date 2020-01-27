@@ -1,4 +1,4 @@
-const store = require('../store.js');
+const store = require('../store');
 
 module.exports = {
     createAlt(id, info) {

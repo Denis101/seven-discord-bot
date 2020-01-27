@@ -1,4 +1,4 @@
-const { hasRole } = require('./roleUtils.js');
+const { hasRole } = require('./utils/roleUtils.js');
 
 module.exports = {
     guildLeader: member => {

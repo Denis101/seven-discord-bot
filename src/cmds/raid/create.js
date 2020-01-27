@@ -1,7 +1,6 @@
-const { message, raid, raidExists } = require('../../selectors');
-const { createRaid, updateRaid } = require('../../actions');
+const { message, raidExists } = require('../../selectors');
+const { createRaid } = require('../../actions');
 const { guildLeader } = require('../../authenticators.js');
-const { createTransaction } = require('../../transaction.js');
 
 module.exports = {
     authenticator: guildLeader,
@@ -35,35 +34,12 @@ module.exports = {
             return;
         }
 
-        let rowsSql = 'display_name';
-        let values = [name];
-
-        if (day) {
-            rowsSql += ', day';
-            values.push(day);
-        }
-
-        if (time) {
-            rowsSql += ', time';
-            values.push(time);
-        }
-
-        let valuesSql = '';
-        for (let i = 0; i < values.length; i++) {
-            valuesSql += `$${i+1}${values.length > 1 && i == values.length - 1 ? ',' : ''}`;
-        }
-
         try {
-            await createTransaction(`INSERT INTO raids (${rowsSql}) VALUES (${valuesSql})`, values);
-            createRaid(name);
-
-            if (time || day) {
-                updateRaid(name, {
-                    ...raid(name),
-                    time,
-                    day,
-                });
-            }
+            createRaid({
+                name,
+                day,
+                time,
+            });
         }
         catch (e) {
             message().channel.send('**Work failed**, looks like something went wrong on my end. Oopsies.');

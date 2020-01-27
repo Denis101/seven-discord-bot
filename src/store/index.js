@@ -1,5 +1,6 @@
 const fs = require('fs');
-const { createStore } = require('redux');
+const { createStore, applyMiddleware } = require('redux');
+const thunk = require('redux-thunk').default;
 
 const reducerFolder = `${process.cwd()}/src/reducers`;
 let reducers = null;
@@ -22,5 +23,5 @@ const rootReducer = (state = {}, action) => {
     return newState;
 }
 
-let store = createStore(rootReducer);
+let store = createStore(rootReducer, applyMiddleware(thunk));
 module.exports = store;

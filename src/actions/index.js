@@ -1,7 +1,9 @@
-const store = require('../store.js');
+const store = require('../store');
+const raidActions = require('./raids.js');
 const memberActions = require('./members.js');
 
 module.exports = {
+    ...raidActions,
     ...memberActions,
     setReady: () => store.dispatch({
         type: 'READY_SET',
@@ -22,18 +24,5 @@ module.exports = {
     addTeam: team => store.dispatch({
         type: 'TEAM_ADD',
         team,
-    }),
-    createRaid: name => store.dispatch({
-        type: 'RAID_CREATE',
-        name,
-    }),
-    updateRaid: (name, raid) => store.dispatch({
-        type: 'RAID_UPDATE',
-        name,
-        raid,
-    }),
-    removeRaid: name => store.dispatch({
-        type: 'RAID_REMOVE',
-        name,
     }),
 };

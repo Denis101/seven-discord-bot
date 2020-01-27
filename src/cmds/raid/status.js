@@ -1,7 +1,7 @@
 const { RichEmbed } = require('discord.js');
 const { guild, message, raid, nextRaid } = require('../../selectors');
-const { hasRole, getRaidRole, getMembersInTeam } = require('../../roleUtils.js');
-const { getNickname } = require('../../userUtils.js');
+const { hasRole, getRaidRole, getMembersInTeam } = require('../../utils/roleUtils.js');
+const { getNickname } = require('../../utils/userUtils.js');
 
 const RANGED_DPS = [
     'Warlock',

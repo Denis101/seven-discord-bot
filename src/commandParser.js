@@ -1,6 +1,7 @@
 const fs = require('fs');
 const { RichEmbed } = require('discord.js');
 const { message, guild } = require('./selectors');
+const { createHelpMessage } = require('./utils/messageUtils.js');
 
 const build = cmdDef => {
     const cmd = {
@@ -75,11 +76,17 @@ const getChainLink = (cmd, args) => {
     return link;
 };
 
-const parse = input => {
+const parse = (input, rootHelpData) => {
     let cmds = commands();
     const args = input.trim().split(' ').map(a => a.trim());
     const isHelp = args[args.length - 1] === 'help';
     if (isHelp) {
+        if (args.length == 1) {
+            const msg = createHelpMessage(rootHelpData)
+            const sender = message().channel.send;
+            return { execute: () => sender(msg) };
+        }
+
         args.pop();
     }
 
@@ -118,17 +125,7 @@ const parse = input => {
         let current = chainRoot;
         while (current != null) {
             if (current.next == null) {
-                const embed = new RichEmbed()
-                    .setTitle(current.help.title)
-                    .setDescription(current.help.description)
-                    .setColor(0x000000);
-
-                if (current.help.fields && current.help.fields.length > 0) {
-                    current.help.fields.forEach(f => {
-                        embed.addField(f.title, f.description, f.inline || false);
-                    });
-                }
-
+                const embed = createHelpMessage(current.help);
                 current.handler = () => message().channel.send(embed);
             } else {
                 current.handler = next => next.execute();

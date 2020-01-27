@@ -3,10 +3,32 @@ const Discord = require('discord.js');
 
 const { Pool } = require('pg');
 
-const { userIsReferenced } = require('./userUtils.js');
+const { userIsReferenced } = require('./utils/userUtils.js');
 const { ready, discordClient, dbClient, message } = require('./selectors');
 const { setReady, setDiscordClient, setDbClient, setMessage } = require('./actions');
 const { parse } = require('./commandParser.js');
+
+const HELP_DATA = {
+    title: '@Laty <command>',
+    description: 'I am the ultimate rage management tool',
+    fields: [
+        {
+            title: '**Available Commands**',
+            description: '---',
+            inline: false,
+        },
+        {
+            title: '__raid__',
+            description: 'Manage your raids.\nView help for this command with `@Laty raid help`',
+            inline: true
+        },
+        {
+            title: '__raid-team__',
+            description: 'Manage your raid teams.\nView help for this command with `@Laty raid-team help`',
+            inline: true
+        },
+    ],
+};
 
 setDiscordClient(new Discord.Client());
 
@@ -34,7 +56,7 @@ discordClient().on('message', msg => {
     }
 
     setMessage(msg);
-    parse(msg.content).execute();
+    parse(msg.content, HELP_DATA).execute();
 });
 
 discordClient().login(process.env.DISCORD_TOKEN);

@@ -1,5 +1,5 @@
 const { message } = require('../../selectors');
-const { getRaidRole, getRaidRoleMessage } = require('../../roleUtils.js');
+const { getRaidRole, getRaidRoleMessage } = require('../../utils/roleUtils.js');
 const { guildLeader, raidLeader } = require('../../authenticators.js');
 
 module.exports = {
