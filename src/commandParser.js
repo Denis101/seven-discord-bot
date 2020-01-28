@@ -1,6 +1,6 @@
 const fs = require('fs');
 const { channel, author, guild } = require('./selectors');
-const { createHelpEmbed, createFailureEmbed } = require('./utils/messageUtils.js');
+const { createListEmbed, createFailureEmbed } = require('./utils/messageUtils.js');
 
 const build = cmdDef => {
     const cmd = {
@@ -79,7 +79,7 @@ const parse = (input, rootHelpData) => {
     const isHelp = args.length == 0 || args[args.length - 1] === 'help';
     if (isHelp) {
         if (args.length <= 1) {
-            const msg = createHelpEmbed(rootHelpData)
+            const msg = createListEmbed(rootHelpData)
             const sender = channel().send;
             return { execute: () => sender(msg) };
         }
@@ -122,7 +122,7 @@ const parse = (input, rootHelpData) => {
         let current = chainRoot;
         while (current != null) {
             if (current.next == null) {
-                const embed = createHelpEmbed(current.help);
+                const embed = createListEmbed(current.help);
                 current.handler = () => channel().send(embed);
             } else {
                 current.handler = next => next.execute();

@@ -19,7 +19,7 @@ NOTE: The team name must match the name of the role exactly.
             },
         ],
     },
-    handler: args => {
+    handler: async args => {
         const name = args[0];
         const team = args[1];
 
@@ -32,11 +32,13 @@ NOTE: The team name must match the name of the role exactly.
             return;
         }
 
-        updateRaid(name, {
+        await updateRaid({
             ...raid(name),
             team,
         });
 
-        channel().send(createSuccessEmbed(`Set team of __${name}__ to __${team}__`));
+        if (raid(name).team) {
+            channel().send(createSuccessEmbed(`Set team of __${name}__ to __${team}__`));
+        }
     },
 };

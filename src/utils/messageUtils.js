@@ -1,13 +1,13 @@
 const { RichEmbed } = require('discord.js');
 
-const createHelpEmbed = help => {
+const createListEmbed = opts => {
     const embed = new RichEmbed()
-                    .setTitle(help.title)
-                    .setDescription(help.description)
+                    .setTitle(opts.title)
+                    .setDescription(opts.description)
                     .setColor(0x000000);
 
-    if (help.fields && help.fields.length > 0) {
-        help.fields.forEach(f => {
+    if (opts.fields && opts.fields.length > 0) {
+        opts.fields.forEach(f => {
             embed.addField(f.title, f.description, f.inline || false);
         });
     }
@@ -38,7 +38,7 @@ const createErrorEmbed = msg => {
 }
 
 module.exports = {
-    createHelpEmbed,
+    createListEmbed,
     createSuccessEmbed,
     createFailureEmbed,
     createErrorEmbed,

@@ -1,6 +1,5 @@
-const { createSuccessEmbed, createFailureEmbed } = require('../../utils/messageUtils.js');
-const { channel, raidExists } = require('../../selectors');
-const { createRaid } = require('../../actions');
+const { createListEmbed } = require('../../utils/messageUtils.js');
+const { getNext } = require('../../utils/dateTimeUtils.js');
 const { guildLeader } = require('../../authenticators.js');
 
 module.exports = {
@@ -9,28 +8,24 @@ module.exports = {
         title: '@Laty raid list',
         description: 'Lists all raids.',
     },
-    handler: async args => {
-        const name = args[0];
-        const day = args[1];
-        const time = args[2];
+    handler: async () => {
+        const fields = Object.keys(raids()).map(k => ({
+                title: `**__${raids()[k].name}__**`,
+                description: 
+`
+${raids()[k].description}
+${!!raids()[k].day && !!raids()[k].time ? `
 
-        if (!name) {
-            channel().send(createFailureEmbed('A name is required to create a raid.'));
-        }
+__Next raid__
+:watch: ${getNext(raids()[k].day, raids()[k].time)}
+` : ''}
+`
+        }));
 
-        if (raidExists(name)) {
-            channel().send(createFailureEmbed('A raid with this name already exists.\nDid you mean \'@Laty raid update\'?'));
-            return;
-        }
-
-        await createRaid({
-            name,
-            day,
-            time,
-        });
-
-        if (raidExists(name)) {
-            channel().send(createSuccessEmbed(`Created new raid __${name}__`));
-        }
+        channel().send(createListEmbed({
+            title: 'Raids',
+            description: 'Here\'s a list of all the raids I\'m managing',
+            fields,
+        }));
     },
 }
