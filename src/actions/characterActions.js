@@ -3,7 +3,7 @@ const { store } = require('../store');
 const { wrap } = require('../utils/actionUtils.js');
 
 const initFunc = async dispatch => {
-    const res = await transaction('SELECT * FROM characters');
+    const res = await transaction({ sql: 'SELECT * FROM characters' });
     dispatch({
         type: 'CHARACTERS_INIT_COMPLETE',
         characters: res.rows.map(r => ({

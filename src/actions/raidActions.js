@@ -16,7 +16,7 @@ const mapKeyToDb = key => {
 };
 
 const initFunc = async dispatch => {
-    const res = await transaction('SELECT * FROM raids');
+    const res = await transaction({ sql: 'SELECT * FROM raids' });
     dispatch({
         type: 'RAIDS_INIT_COMPLETE',
         raids: res.rows.map(r => ({
@@ -30,8 +30,10 @@ const initFunc = async dispatch => {
 
 const createRaidFunc = raid => {
     return asyncAction(async raid => {
-        await transaction(getInsertQuery('raids', raid, mapKeyToDb), Object.values(raid))
-        const res = transaction(`${getSelectQuery('raids', ['id'])} WHERE display_name = $1`, [raid.id]);
+        await transaction(getInsertQuery('raids', raid, mapKeyToDb));
+        const res = transaction(
+            getSelectQuery('raids', ['id'])
+                .withSimpleWhereClause({ name: raid.name }, mapKeyToDb));
         return {
             ...raid,
             id: res.rows[0].id,
@@ -45,7 +47,7 @@ const updateRaidFunc = raid => {
         delete raidCopy['id'];
         await transaction(
             `${getUpdateQuery('raids', raidCopy, mapKeyToDb)} WHERE id = \$${Object.keys(raidCopy).length}`,
-            [ ...Object.values(raidCopy), raid.id ]);
+            [ ...Object.values(raidCopy).filter(v => !!v), raid.id ]);
     }, 'RAID_UPDATE', raid);
 };
 

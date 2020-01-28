@@ -3,7 +3,7 @@ const { store } = require('../store');
 const { wrap } = require('../utils/actionUtils.js');
 
 const initFunc = async dispatch => {
-    const res = await transaction('SELECT * FROM teams');
+    const res = await transaction({ sql: 'SELECT * FROM teams' });
     dispatch({
         type: 'TEAMS_INIT_COMPLETE',
         teams: res.rows.map(r => r.display_name),
