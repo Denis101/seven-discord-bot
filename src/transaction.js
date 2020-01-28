@@ -9,9 +9,15 @@ const getSelectQuery = (table, keys, keyMapper = k => k) => {
 };
 
 const getInsertQuery = (table, obj, keyMapper = k => k) => {
-    const keys = Object.keys(obj).filter(k => !!obj[k]).map(keyMapper);
+    const keys = Object.keys(obj).filter(k => !!obj[k]);
     const values = keys.map(k => obj[k]);
-    return `INSERT INTO ${table} (${keys.join(',')}) VALUES (${values.map((_, i) => getParamIndex(i)).join(',')})`;
+
+    console.log(keys, values);
+
+    const result = `INSERT INTO ${table} (${keys.map(keyMapper).join(',')}) VALUES (${values.map((_, i) => getParamIndex(i)).join(',')})`;
+
+    console.log(result);
+    return result;
 };
 
 const getUpdateQuery = (table, obj, keyMapper = k => k) => {
