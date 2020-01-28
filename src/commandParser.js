@@ -94,7 +94,9 @@ const parse = (input, rootHelpData) => {
     const rootCmd = shiftedArgs.shift();
 
     if (!cmds[rootCmd]) {
-        throw 'Invalid command';
+        console.log(rootCmd, args, isHelp);
+        channel().send(createFailureEmbed(`I didn't understand your command: \`${input}\``))
+        return;
     }
 
     const chainRoot = getChainLink(rootCmd, 0, cmds[rootCmd], [...shiftedArgs]);
