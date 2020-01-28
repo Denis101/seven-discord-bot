@@ -28,8 +28,8 @@ const initFunc = async dispatch => {
     });
 };
 
-const createRaidFunc = async raid => {
-    return asyncAction(async aid => {
+const createRaidFunc = raid => {
+    return asyncAction(async raid => {
         await transaction(getInsertQuery('raids', raid, mayKeyToDb), values)
         const res = transaction(`${getSelectQuery('raids', ['id'])} WHERE display_name = $1`, [raid.id]);
         return {
@@ -39,7 +39,7 @@ const createRaidFunc = async raid => {
     }, 'RAID_CREATE', raid);
 };
 
-const updateRaidFunc = async raid => {
+const updateRaidFunc = raid => {
     return asyncAction(async raid => {
         const raidCopy = { ...raid };
         delete raidCopy['id'];
