@@ -26,7 +26,7 @@ const getSelectQuery = (table, keys, keyMapper = k => k) => {
 };
 
 const getInsertQuery = (table, obj, keyMapper = k => k) => {
-    return createQueryMapper(
+    return createQueryWrapper(
         (t, o, m) => {
             const ks = Object.keys(o).filter(k => !!o[k]);
 
