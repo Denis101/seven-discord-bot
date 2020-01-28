@@ -37,7 +37,7 @@ module.exports = {
                 inline: true
             },
             {
-                title: '__set-description',
+                title: '__set-description__',
                 description: 'Sets the description of this raid.',
                 inline: true
             },
