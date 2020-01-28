@@ -76,7 +76,7 @@ const getChainLink = (name, index, cmd, args) => {
 const parse = (input, rootHelpData) => {
     let cmds = commands();
     const args = input.trim().split(' ').map(a => a.trim());
-    const isHelp = args.length == 0 || args[args.length - 1] === 'help';
+    const isHelp = args.length <= 1 || args[args.length - 1] === 'help';
     if (isHelp) {
         if (args.length <= 1) {
             const msg = createListEmbed(rootHelpData)
@@ -94,9 +94,8 @@ const parse = (input, rootHelpData) => {
     const rootCmd = shiftedArgs.shift();
 
     if (!cmds[rootCmd]) {
-        console.log(rootCmd, args, isHelp);
-        channel().send(createFailureEmbed(`I didn't understand your command: \`${input}\``))
-        return;
+        channel().send(createFailureEmbed(`I didn't understand your command: \`${args.join(' ')}\``))
+        return { execute: () => {} };
     }
 
     const chainRoot = getChainLink(rootCmd, 0, cmds[rootCmd], [...shiftedArgs]);
