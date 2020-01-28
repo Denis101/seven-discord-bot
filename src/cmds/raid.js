@@ -1,4 +1,4 @@
-const { message } = require('../selectors');
+const { channel } = require('../selectors');
 
 module.exports = {
     directory: __dirname + '/raid',
@@ -50,7 +50,7 @@ module.exports = {
     },
     handler: (args, next) => {
         if (args.length < 1) {
-            message().channel.send('@Laty raid: missing subcommand');
+            channel().send('@Laty raid: missing subcommand');
             return;
         }
 

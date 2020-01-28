@@ -2,7 +2,8 @@ const store = require('../store');
 
 module.exports = {
     ready: () => store.getState().ready,
-    message: () => store.getState().message,
+    author: () => store.getState().message && store.getState().message.author,
+    channel: () => store.getState().message && store.getState().message.channel,
     dbClient: () => store.getState().dbClient,
     discordClient: () => store.getState().discordClient,
     guild: () => store.getState().message.guild,

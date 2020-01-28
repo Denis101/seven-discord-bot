@@ -1,4 +1,4 @@
-const { message } = require('../../selectors');
+const { guild } = require('../../selectors');
 const { getRaidRole, getRaidRoleMessage } = require('../../utils/roleUtils.js');
 const { guildLeader, raidLeader } = require('../../authenticators.js');
 
@@ -28,8 +28,7 @@ module.exports = {
         return guildLeader(member) || raidLeader(member);
     },
     handler: () => {
-        const g = message().guild;
-        g.members.filter(m => getRaidRole(m) !== null)
+        guild().members.filter(m => getRaidRole(m) !== null)
             .forEach(m => m.send(getRaidRoleMessage(m)));
     },
 };

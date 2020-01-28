@@ -1,4 +1,4 @@
-const { message } = require('../../selectors');
+const { channel } = require('../../selectors');
 
 module.exports = {
     help: {
@@ -12,6 +12,6 @@ module.exports = {
         ]
     },
     handler: () => {
-        message().channel.send('Not yet implemented.');
+        channel().send('Not yet implemented.');
     },
 };

@@ -1,5 +1,5 @@
 const { createSuccessEmbed, createFailureEmbed } = require('../../utils/messageUtils.js');
-const { message, raid, raidExists } = require('../../selectors');
+const { channel, raid, raidExists } = require('../../selectors');
 const { updateRaid } = require('../../actions');
 const { guildLeader } = require('../../authenticators.js');
 
@@ -24,11 +24,11 @@ NOTE: The team name must match the name of the role exactly.
         const team = args[1];
 
         if (!name) {
-            message().channel.send(createFailureEmbed("Can't set team, no raid name provided."));
+            channel().send(createFailureEmbed("Can't set team, no raid name provided."));
         }
 
         if (!raidExists(name)) {
-            message().channel.send(createFailureEmbed(`Can't set team of __${name}__ raid, it doesn't exist!`));
+            channel().send(createFailureEmbed(`Can't set team of __${name}__ raid, it doesn't exist!`));
             return;
         }
 
@@ -37,6 +37,6 @@ NOTE: The team name must match the name of the role exactly.
             team,
         });
 
-        message().channel.send(createSuccessEmbed(`Set team of __${name}__ to __${team}__`));
+        channel().send(createSuccessEmbed(`Set team of __${name}__ to __${team}__`));
     },
 };

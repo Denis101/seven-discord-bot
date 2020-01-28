@@ -1,5 +1,5 @@
 const fs = require('fs');
-const { message, guild } = require('./selectors');
+const { channel, author, guild } = require('./selectors');
 const { createHelpEmbed, createFailureEmbed } = require('./utils/messageUtils.js');
 
 const build = cmdDef => {
@@ -38,11 +38,11 @@ const commands = () => {
 };
 
 const authenticate = (cmd, next) => {
-    const user = guild().members.find(m => m.id === message().author.id);
+    const user = guild().members.find(m => m.id === author().id);
     if (cmd.authenticator(user)) {
         next.execute();
     } else {
-        message().channel.send(createFailureEmbed("Sorry you're not allowed to do that"));
+        channel().send(createFailureEmbed("Sorry you're not allowed to do that"));
     }
 };
 
@@ -90,7 +90,7 @@ const parse = (input, rootHelpData) => {
         if (args.length <= 1) {
             console.log('> help');
             const msg = createHelpEmbed(rootHelpData)
-            const sender = message().channel.send;
+            const sender = channel().send;
             return { execute: () => sender(msg) };
         }
 
@@ -133,7 +133,7 @@ const parse = (input, rootHelpData) => {
         while (current != null) {
             if (current.next == null) {
                 const embed = createHelpEmbed(current.help);
-                current.handler = () => message().channel.send(embed);
+                current.handler = () => channel().send(embed);
             } else {
                 current.handler = next => next.execute();
             }

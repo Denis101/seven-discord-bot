@@ -5,7 +5,7 @@ const { Pool } = require('pg');
 
 const { userIsReferenced } = require('./utils/userUtils.js');
 const { createErrorEmbed } = require('./utils/messageUtils.js');
-const { ready, discordClient, dbClient, message } = require('./selectors');
+const { ready, discordClient, dbClient, channel } = require('./selectors');
 const { setReady, setDiscordClient, setDbClient, setMessage } = require('./actions');
 const { parse } = require('./commandParser.js');
 
@@ -68,7 +68,7 @@ const exitHandler = () => {
 }
 
 const errorHandler = e => {
-    message() && message().channel.send(createErrorEmbed(e));
+    channel() && channel().send(createErrorEmbed(e));
 
     console.error(e);
     exitHandler.bind(null, {exit:true});

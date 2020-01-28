@@ -1,5 +1,5 @@
 
-const { message } = require('../selectors');
+const { channel } = require('../selectors');
 
 module.exports = {
     directory: __dirname + '/raid-team',
@@ -34,7 +34,7 @@ NOTE: The team name must match the name of the role exactly.
     },
     handler: (args, next) => {
         if (args.length < 1) {
-            message().channel.send('Missing subcommand for raid-team command');
+            channel().send('Missing subcommand for raid-team command');
             return;
         }
 

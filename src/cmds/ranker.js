@@ -1,5 +1,5 @@
 const { RichEmbed } = require('discord.js');
-const { message } = require('../selectors');
+const { channel } = require('../selectors');
 
 // Super secret command :)
 module.exports = {
@@ -8,7 +8,7 @@ module.exports = {
         description: 'Slipry is your god now.'
     },
     handler: () => {
-        message().channel.send(new RichEmbed()
+        channel().send(new RichEmbed()
             .setImage("https://media.discordapp.net/attachments/629386652111994940/671258544573513758/unknown.png"));
     },
 };
