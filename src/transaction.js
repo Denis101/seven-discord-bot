@@ -13,7 +13,7 @@ const withSimpleWhereClause = (obj, keyMapper = k => k) => {
 };
 
 const createQueryWrapper = (fn, args) => {
-    const query = fn.apply(args);
+    const query = fn.apply(null, args);
     query.withSimpleWhereClause = withSimpleWhereClause.bind(query);
     return query;
 }
