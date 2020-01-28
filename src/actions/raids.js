@@ -1,6 +1,8 @@
 const { createTransaction } = require('../transaction.js');
 const store = require('../store');
 
+const wrap = fn => dispatch => fn(dispatch).catch(error => dispatch({ type: 'ERROR', error }));
+
 const createRaidFunc = async raid => {
     return async dispatch => {
         let rowsSql = 'display_name';
@@ -37,7 +39,7 @@ const createRaidFunc = async raid => {
 };
 
 module.exports = {
-    createRaid: async raid => store.dispatch(createRaidFunc(raid)),
+    createRaid: async raid => store.dispatch(wrap(createRaidFunc(raid))),
     updateRaid: (name, raid) => store.dispatch({
         type: 'RAID_UPDATE',
         name,
