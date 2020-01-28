@@ -26,7 +26,7 @@ const HELP_DATA = {
         },
         {
             title: '__team__',
-            description: 'Manage your raid teams.\nView help for this command with `@Laty raid-team help`',
+            description: 'Manage your raid teams.\nView help for this command with `@Laty team help`',
             inline: true
         },
     ],

@@ -46,7 +46,7 @@ const authenticate = (cmd, next) => {
     }
 };
 
-const getChainLink = (name, index, cmd, args) => {
+const getChainLink = (cmd, args) => {
     const execHandler = function() {
         this.handler(this.next);
     }
@@ -76,8 +76,13 @@ const getChainLink = (name, index, cmd, args) => {
 const parse = (input, rootHelpData) => {
     let cmds = commands();
     const args = input.trim().split(' ').map(a => a.trim());
-    const isHelp = args.length <= 1 || args[args.length - 1] === 'help';
+
+    // First arg is always the root cmd
+    args.shift();
+
+    const isHelp = args.length < 1 || args[args.length - 1] === 'help';
     if (isHelp) {
+        // either no cmd provided, or root cmd is help
         if (args.length <= 1) { 
             channel().send(createListEmbed(rootHelpData));
             return { execute: () => {} };
@@ -85,9 +90,6 @@ const parse = (input, rootHelpData) => {
 
         args.pop();
     }
-
-    // First arg is always the root cmd
-    args.shift();
 
     const shiftedArgs = [...args];
     const rootCmd = shiftedArgs.shift();
@@ -97,7 +99,7 @@ const parse = (input, rootHelpData) => {
         return { execute: () => {} };
     }
 
-    const chainRoot = getChainLink(rootCmd, 0, cmds[rootCmd], [...shiftedArgs]);
+    const chainRoot = getChainLink(cmds[rootCmd], [...shiftedArgs]);
     let current = chainRoot;
     cmds = cmds[rootCmd].children;
 
@@ -112,7 +114,7 @@ const parse = (input, rootHelpData) => {
             current = current.next;
         }
 
-        current.next = getChainLink(inputCmd, i, cmds[inputCmd], [...shiftedArgs]);
+        current.next = getChainLink(cmds[inputCmd], [...shiftedArgs]);
         current = current.next;
 
         cmds = cmds[inputCmd].children;
