@@ -2,7 +2,7 @@ const wrap = fn => {
     return dispatch => fn(dispatch).catch(error => dispatch({ type: 'ERROR', error }));
 };
 
-const asyncAction = (action, actionId, data) => {
+const asyncAction = async (action, actionId, data) => {
     return async dispatch => {
         const requestAction = 
         requestAction[dataKey] = data;

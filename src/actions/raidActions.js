@@ -2,19 +2,6 @@ const { transaction, getInsertQuery, getUpdateQuery } = require('../transaction.
 const { store } = require('../store');
 const { wrap, asyncAction } = require('../utils/actionUtils.js');
 
-const initFunc = async dispatch => {
-    const res = await transaction('SELECT * FROM raids');
-    dispatch({
-        type: 'RAIDS_INIT_COMPLETE',
-        raids: res.rows.map(r => ({
-            name: r.display_name,
-            description: r.description,
-            day: r.day,
-            time: r.time,
-        })),
-    });
-};
-
 const mapKeyToDb = key => {
     switch (key) {
         case 'instance':
@@ -28,8 +15,21 @@ const mapKeyToDb = key => {
     }
 };
 
-const createRaidFunc = raid => {
-    return asyncAction(raid => {
+const initFunc = async dispatch => {
+    const res = await transaction('SELECT * FROM raids');
+    dispatch({
+        type: 'RAIDS_INIT_COMPLETE',
+        raids: res.rows.map(r => ({
+            name: r.display_name,
+            description: r.description,
+            day: r.day,
+            time: r.time,
+        })),
+    });
+};
+
+const createRaidFunc = async raid => {
+    return asyncAction(async aid => {
         await transaction(getInsertQuery('raids', raid, mayKeyToDb), values)
         const res = transaction(`${getSelectQuery('raids', ['id'])} WHERE display_name = $1`, [raid.id]);
         return {
@@ -39,8 +39,8 @@ const createRaidFunc = raid => {
     }, 'RAID_CREATE', raid);
 };
 
-const updateRaidFunc = raid => {
-    return asyncAction(raid => {
+const updateRaidFunc = async raid => {
+    return asyncAction(async raid => {
         const raidCopy = { ...raid };
         delete raidCopy['id'];
         await transaction(
