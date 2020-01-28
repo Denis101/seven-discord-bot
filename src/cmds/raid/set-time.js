@@ -40,7 +40,7 @@ module.exports = {
         }
 
         updateRaid(name, {
-            ...raid(name),
+            name,
             time,
         });
 

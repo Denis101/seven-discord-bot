@@ -42,8 +42,8 @@ module.exports = {
             return;
         }
 
-        updateRaid(name, {
-            ...raid(name),
+        updateRaid({
+            name,
             day,
         });
 

@@ -2,9 +2,9 @@
 const { channel } = require('../selectors');
 
 module.exports = {
-    directory: __dirname + '/raid-team',
+    directory: __dirname + '/team',
     help: {
-        title: '@Laty raid-team',
+        title: '@Laty team',
         description: `
 Command to manage raid teams.
 NOTE: The team name must match the name of the role exactly.

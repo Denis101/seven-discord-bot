@@ -23,8 +23,12 @@ __Next raid__
 `
         }));
 
+        const title = fields.length > 0
+            ? 'Here\'s a list of all the raids I\'m managing'
+            : 'I\'ve not been given any raids to manage!';
+
         channel().send(createListEmbed({
-            title: 'Here\'s a list of all the raids I\'m managing',
+            title,
             description: '',
             fields,
         }));

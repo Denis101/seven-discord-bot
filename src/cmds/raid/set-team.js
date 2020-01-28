@@ -33,7 +33,7 @@ NOTE: The team name must match the name of the role exactly.
         }
 
         await updateRaid({
-            ...raid(name),
+            name,
             team,
         });
 

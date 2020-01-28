@@ -2,12 +2,12 @@ const { channel } = require('../../selectors');
 
 module.exports = {
     help: {
-        title: '@Laty raid-team remove <name>',
+        title: '@Laty team remove <name>',
         description: 'Command to remove an existing raid team',
         fields: [
             {
                 title: 'Example',
-                description: '@Laty raid-team remove NA'
+                description: '@Laty team remove NA'
             }
         ]
     },

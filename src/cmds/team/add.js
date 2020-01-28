@@ -3,12 +3,12 @@ const { guild } = require('../../selectors');
 
 module.exports = {
     help: {
-        title: '@Laty raid-team add <name>',
+        title: '@Laty team add <name>',
         description: 'Command to add a new raid team',
         fields: [
             {
                 title: 'Example',
-                description: '@Laty raid-team add EU',
+                description: '@Laty team add EU',
                 inline: false,
             },
         ],
