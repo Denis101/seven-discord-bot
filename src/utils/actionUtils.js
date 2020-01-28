@@ -4,8 +4,6 @@ const wrap = fn => {
 
 const asyncAction = (action, actionId, data) => {
     return async dispatch => {
-        const requestAction = 
-        requestAction[dataKey] = data;
         dispatch({ type: `${actionId}_REQUEST`, data });
 
         let newData = null;
