@@ -5,10 +5,10 @@ const getParamIndex = i => {
 };
 
 const withSimpleWhereClause = (obj, keyMapper = k => k) => {
-    const keys = Object.keys(o).filter(k => !!obj[k]).map(m);
+    const keys = Object.keys(obj).filter(k => !!obj[k]).map(m);
     return {
-        sql: `${this.sql} WHERE ${keys.map((k, i) => `${k} = ${getParamIndex(this.values.length + i)}`).join(',')}`,
-        values: [...this.values, addedValues],
+        sql: `${this.sql} WHERE ${keys.map((k, i) => `${keyMapper(k)} = ${getParamIndex(this.values.length + i)}`).join(',')}`,
+        values: [...this.values, keys.map(k => obj[k])],
     };
 };
 
