@@ -1,7 +1,7 @@
-const store = require('../store');
+const { store } = require('../store');
 
 module.exports = {
-    ready: () => store.getState().ready,
+    ready: () => store.getState().boot.complete,
     author: () => store.getState().message && store.getState().message.author,
     channel: () => store.getState().message && store.getState().message.channel,
     dbClient: () => store.getState().dbClient,

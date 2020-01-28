@@ -7,8 +7,6 @@ const createTransaction = async (sql, values) => {
 
     let res = null;
 
-    console.log(sql, values);
-
     try {
         await dbClient().query('BEGIN');
         if (values) {

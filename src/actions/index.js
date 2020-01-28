@@ -1,10 +1,20 @@
-const store = require('../store');
-const raidActions = require('./raids.js');
-const memberActions = require('./members.js');
+const { store } = require('../store');
+const raidActions = require('./raidActions.js');
+const characterActions = require('./characterActions.js');
+const teamActions = require('./teamActions.js');
 
 module.exports = {
     ...raidActions,
-    ...memberActions,
+    ...characterActions,
+    ...teamActions,
+    init: () => {
+        store.dispatch({ type: 'INIT' });
+
+        raidActions.init();
+        characterActions.init();
+        teamActions.init();
+    },
+    initComplete: () => store.dispatch({ type: 'INIT_COMPLETE' }),
     setReady: () => store.dispatch({
         type: 'READY_SET',
         ready: true,
@@ -20,9 +30,5 @@ module.exports = {
     setMessage: message => store.dispatch({
         type: 'MESSAGE_SET',
         message,
-    }),
-    addTeam: team => store.dispatch({
-        type: 'TEAM_ADD',
-        team,
     }),
 };

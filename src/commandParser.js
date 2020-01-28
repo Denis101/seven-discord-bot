@@ -46,17 +46,8 @@ const authenticate = (cmd, next) => {
     }
 };
 
-const printLinkLevel = x => {
-    let s = '-';
-    for (let i = 0; i < x; i++) {
-        s += '-';
-    }
-    return s + '>';
-}
-
 const getChainLink = (name, index, cmd, args) => {
     const execHandler = function() {
-        console.log(`${printLinkLevel(index)} ${name}`);
         this.handler(this.next);
     }
 
@@ -88,7 +79,6 @@ const parse = (input, rootHelpData) => {
     const isHelp = args.length == 0 || args[args.length - 1] === 'help';
     if (isHelp) {
         if (args.length <= 1) {
-            console.log('> help');
             const msg = createHelpEmbed(rootHelpData)
             const sender = channel().send;
             return { execute: () => sender(msg) };

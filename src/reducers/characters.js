@@ -1,14 +1,18 @@
+const { convertToObject } = require('../utils/arrayUtils.js');
+
 module.exports = (state = {}, action) => {
     const newState = { ...state };
 
     switch (action.type) {
-        case 'MEMBER_ADD':        
+        case 'CHARACTERS_INIT_COMPLETE':
+            return convertToObject(action.characters, c => c.name);
+        case 'CHARACTER_ADD':        
             newState[action.id] = {};
             return newState;
-        case 'MEMBER_UPDATE':
+        case 'CHARACTER_UPDATE':
             newState[action.id] = action.raid;
             return newState;
-        case 'MEMBER_REMOVE':
+        case 'CHARACTER_REMOVE':
             delete newState[action.id];
             return newState;
         default:

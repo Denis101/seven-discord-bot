@@ -1,5 +1,7 @@
 module.exports = (state = [], action) => {
     switch (action.type) {
+        case 'TEAMS_INIT_COMPLETE':
+            return action.teams;
         case 'TEAM_ADD':
             return [
                 ...state,

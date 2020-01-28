@@ -6,20 +6,8 @@ const { guildLeader } = require('../../authenticators.js');
 module.exports = {
     authenticator: guildLeader,
     help: {
-        title: '@Laty raid create <name> [day] [time]',
-        description: 'Command to create a new raid.',
-        fields: [
-            {
-                title: 'Example 1',
-                description: '@Laty raid create molten-core tuesday 1pm',
-                inline: false,
-            },
-            {
-                title: 'Example 2',
-                description: '@Laty raid create onyxia',
-                inline: false,
-            },
-        ],
+        title: '@Laty raid list',
+        description: 'Lists all raids.',
     },
     handler: async args => {
         const name = args[0];

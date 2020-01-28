@@ -6,8 +6,9 @@ const { Pool } = require('pg');
 const { userIsReferenced } = require('./utils/userUtils.js');
 const { createErrorEmbed } = require('./utils/messageUtils.js');
 const { ready, discordClient, dbClient, channel } = require('./selectors');
-const { setReady, setDiscordClient, setDbClient, setMessage } = require('./actions');
+const { init, initComplete, setDiscordClient, setDbClient, setMessage } = require('./actions');
 const { parse } = require('./commandParser.js');
+const { observeStore } = require('./store');
 
 const HELP_DATA = {
     title: '@Laty <command>',
@@ -34,15 +35,14 @@ const HELP_DATA = {
 setDiscordClient(new Discord.Client());
 
 discordClient().on('ready', async () => {
+    console.log('Booting Laty...');
     const pool = new Pool({
         connectionString: process.env.DATABASE_URL,
         ssl: true
     });
 
     setDbClient(await pool.connect());
-
-    setReady();
-    console.log('Bleep bloop, we are online.');
+    init();
 });
 
 discordClient().on('message', msg => {
@@ -65,15 +65,24 @@ discordClient().login(process.env.DISCORD_TOKEN);
 
 const exitHandler = () => {
     dbClient() && dbClient().release();
-}
+};
 
 const errorHandler = e => {
     channel() && channel().send(createErrorEmbed(e));
 
     console.error(e);
-    exitHandler.bind(null, {exit:true});
-}
+    exitHandler.bind(null, { exit:true });
+};
 
-process.on('exit', exitHandler.bind(null,{cleanup:true}));
+observeStore(state => state.error, error => error && errorHandler(error));
+observeStore(state => state.boot, boot => {
+    if (boot.initializing && Object.values(boot.reducers).reduce((a, b) => a && b, true)) {
+        console.log('Boot sequence complete.');
+        console.log('Listening for commands...');
+        initComplete();
+    }
+});
+
+process.on('exit', exitHandler.bind(null, { cleanup:true }));
 process.on('uncaughtException', errorHandler);
 process.on('unhandledRejection', errorHandler);

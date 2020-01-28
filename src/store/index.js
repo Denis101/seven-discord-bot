@@ -1,7 +1,5 @@
 const fs = require('fs');
 const { createStore, applyMiddleware } = require('redux');
-const thunk = require('redux-thunk').default;
-
 const reducerFolder = `${process.cwd()}/src/reducers`;
 let reducers = null;
 
@@ -23,5 +21,22 @@ const rootReducer = (state = {}, action) => {
     return newState;
 }
 
-let store = createStore(rootReducer, applyMiddleware(thunk));
-module.exports = store;
+let store = createStore(rootReducer, {}, applyMiddleware(require('redux-thunk').default));
+module.exports = {
+    store,
+    observeStore: (select, onChange) => {
+        let currentState;
+
+        const handleChange = () => {
+            let nextState = select(store.getState());
+            if (nextState !== currentState) {
+                currentState = nextState;
+                onChange(currentState);
+            }
+        };
+
+        let unsubscribe = store.subscribe(handleChange);
+        handleChange();
+        return unsubscribe;
+    },
+}
