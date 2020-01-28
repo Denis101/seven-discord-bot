@@ -30,7 +30,7 @@ const initFunc = async dispatch => {
 
 const createRaidFunc = raid => {
     return asyncAction(async raid => {
-        await transaction(getInsertQuery('raids', raid, mapKeyToDb), values)
+        await transaction(getInsertQuery('raids', raid, mapKeyToDb), Object.values(raid))
         const res = transaction(`${getSelectQuery('raids', ['id'])} WHERE display_name = $1`, [raid.id]);
         return {
             ...raid,
