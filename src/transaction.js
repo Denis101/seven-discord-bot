@@ -6,9 +6,11 @@ const getParamIndex = i => {
 
 const withSimpleWhereClause = (obj, keyMapper = k => k) => {
     const keys = Object.keys(obj).filter(k => !!obj[k]);
+    const values = keys.map(k => obj[k]);
+    const startIndex = this.values ? this.values.length : 0;
     return {
-        sql: `${this.sql} WHERE ${keys.map((k, i) => `${keyMapper(k)} = ${getParamIndex(this.values.length + i)}`).join(',')}`,
-        values: [...this.values, keys.map(k => obj[k])],
+        sql: `${this.sql} WHERE ${keys.map((k, i) => `${keyMapper(k)} = ${getParamIndex(startIndex + i)}`).join(',')}`,
+        values: this.values ? [...this.values, values] : [values],
     };
 };
 
@@ -29,7 +31,6 @@ const getInsertQuery = (table, obj, keyMapper = k => k) => {
     return createQueryWrapper(
         (t, o, m) => {
             const ks = Object.keys(o).filter(k => !!o[k]);
-
             return {
                 sql: `INSERT INTO ${t} (${ks.map(m).join(',')}) VALUES (${ks.map((_, i) => getParamIndex(i)).join(',')})`,
                 values: ks.map(k => o[k]),
