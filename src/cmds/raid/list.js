@@ -24,8 +24,8 @@ __Next raid__
         }));
 
         channel().send(createListEmbed({
-            title: 'Raids',
-            description: 'Here\'s a list of all the raids I\'m managing',
+            title: 'Here\'s a list of all the raids I\'m managing',
+            description: '',
             fields,
         }));
     },
