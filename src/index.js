@@ -68,10 +68,7 @@ const exitHandler = () => {
 }
 
 const errorHandler = e => {
-    message() && message().channel.send(createErrorEmbed({
-        title: '**I\'m afraid my wires got crossed**, so I can\'t do what you asked.',
-        description: e,
-    }));
+    message() && message().channel.send(createErrorEmbed(e));
 
     console.error(e);
     exitHandler.bind(null, {exit:true});

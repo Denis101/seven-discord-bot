@@ -42,10 +42,7 @@ const authenticate = (cmd, next) => {
     if (cmd.authenticator(user)) {
         next.execute();
     } else {
-        message().channel.send(createFailureEmbed({
-            title: "Sorry, you're not allowed to do that.",
-            description: "Looks like you're lacking the necessary role to perform this action. Talk to your Discord server manager to sort that out."
-        }));
+        message().channel.send(createFailureEmbed("Sorry you're not allowed to do that"));
     }
 };
 

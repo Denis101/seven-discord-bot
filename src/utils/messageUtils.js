@@ -29,10 +29,10 @@ const createFailureEmbed = msg => {
         .setColor(0xFF0000);
 }
 
-const createErrorEmbed = e => {
+const createErrorEmbed = msg => {
     return new RichEmbed()
-        .setTitle(e.title)
-        .setDescription(e.description)
+        .setTitle('**I\'m afraid my wires got crossed**')
+        .setDescription(msg)
         .setFooter('Send details of this message to Disgust so he can fix me up')
         .setColor(0xFF0000);
 }
