@@ -1,3 +1,4 @@
+
 CREATE TABLE IF NOT EXISTS raids (
     id SERIAL PRIMARY KEY,
     instance_id NUMERIC,
@@ -6,18 +7,20 @@ CREATE TABLE IF NOT EXISTS raids (
     description VARCHAR (255),
     day VARCHAR(15),
     time VARCHAR(15),
-    create_date TIMESTAMP,
-    modified_date TIMESTAMP,
-    delete_date TIMESTAMP
+    create_date NUMERIC,
+    modified_date NUMERIC,
+    delete_date NUMERIC,
+    UNIQUE(id, display_name)
 );
 
 CREATE TABLE IF NOT EXISTS teams (
     id SERIAL PRIMARY KEY,
     role_id VARCHAR (64) NOT NULL,
     display_name VARCHAR(64),
-    create_date TIMESTAMP,
-    modified_date TIMESTAMP,
-    delete_date TIMESTAMP
+    create_date NUMERIC,
+    modified_date NUMERIC,
+    delete_date NUMERIC,
+    UNIQUE(id, role_id)
 );
 
 CREATE TABLE IF NOT EXISTS characters (
@@ -29,9 +32,10 @@ CREATE TABLE IF NOT EXISTS characters (
     is_tank BOOLEAN,
     is_healer BOOLEAN,
     is_main BOOLEAN,
-    create_date TIMESTAMP,
-    modified_date TIMESTAMP,
-    delete_date TIMESTAMP
+    create_date NUMERIC,
+    modified_date NUMERIC,
+    delete_date NUMERIC,
+    UNIQUE(id, user_id, display_name)
 );
 
 CREATE TABLE IF NOT EXISTS character_assignments (
@@ -41,9 +45,10 @@ CREATE TABLE IF NOT EXISTS character_assignments (
     spell_id NUMERIC NOT NULL,
     order_number NUMERIC,
     is_backup BOOLEAN,
-    create_date TIMESTAMP,
-    modified_date TIMESTAMP,
-    delete_date TIMESTAMP
+    create_date NUMERIC,
+    modified_date NUMERIC,
+    delete_date NUMERIC,
+    UNIQUE(id)
 );
 
 CREATE TABLE IF NOT EXISTS character_assignment_groups (
@@ -57,9 +62,10 @@ CREATE TABLE IF NOT EXISTS character_assignment_groups (
     group_6 BOOLEAN,
     group_7 BOOLEAN,
     group_8 BOOLEAN,
-    create_date TIMESTAMP,
-    modified_date TIMESTAMP,
-    delete_date TIMESTAMP
+    create_date NUMERIC,
+    modified_date NUMERIC,
+    delete_date NUMERIC,
+    UNIQUE(id)
 );
 
 CREATE TABLE IF NOT EXISTS character_assignments_targets (
@@ -67,23 +73,26 @@ CREATE TABLE IF NOT EXISTS character_assignments_targets (
     character_assignment_id NUMERIC,
     target_table VARCHAR(100),
     target_id NUMERIC,
-    create_date TIMESTAMP,
-    modified_date TIMESTAMP,
-    delete_date TIMESTAMP
+    create_date NUMERIC,
+    modified_date NUMERIC,
+    delete_date NUMERIC,
+    UNIQUE(id)
 );
 
 CREATE TABLE IF NOT EXISTS character_assignment_raid_targets (
     id SERIAL PRIMARY KEY,
     character_assignment_id NUMERIC,
     raid_target_icon_id NUMERIC,
-    create_date TIMESTAMP,
-    modified_date TIMESTAMP,
-    delete_date TIMESTAMP
+    create_date NUMERIC,
+    modified_date NUMERIC,
+    delete_date NUMERIC,
+    UNIQUE(id)
 );
 
 CREATE TABLE IF NOT EXISTS instances (
     id SERIAL PRIMARY KEY,
     display_name VARCHAR (255) NOT NULL,
+    UNIQUE(id)
 );
 
 CREATE TABLE IF NOT EXISTS instance_debuff_slots (
@@ -105,9 +114,10 @@ CREATE TABLE IF NOT EXISTS instance_debuff_slots (
     debuff_slot_14 NUMERIC,
     debuff_slot_15 NUMERIC,
     debuff_slot_16 NUMERIC,
-    create_date TIMESTAMP,
-    modified_date TIMESTAMP,
-    delete_date TIMESTAMP
+    create_date NUMERIC,
+    modified_date NUMERIC,
+    delete_date NUMERIC,
+    UNIQUE(id)
 );
 
 -- CREATE TABLE IF NOT EXISTS instance_assignments (
@@ -125,6 +135,7 @@ CREATE TABLE IF NOT EXISTS instance_encounters (
     instance_id NUMERIC NOT NULL,
     display_name VARCHAR (255) NOT NULL,
     icon_id NUMERIC,
+    UNIQUE(id)
 );
 
 CREATE TABLE IF NOT EXISTS spells (
@@ -132,11 +143,12 @@ CREATE TABLE IF NOT EXISTS spells (
     game_spell_id NUMERIC,
     display_name VARCHAR (255),
     icon_id NUMERIC,
-    
+    UNIQUE(id, game_spell_id)
 );
 
 CREATE TABLE IF NOT EXISTS icons (
     id SERIAL PRIMARY KEY,
     icon_url VARCHAR (255),
-    discord_emoji VARCHAR (255)
+    discord_emoji VARCHAR (255),
+    UNIQUE(id)
 );

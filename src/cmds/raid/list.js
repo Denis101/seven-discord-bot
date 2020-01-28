@@ -10,15 +10,13 @@ module.exports = {
         description: 'Lists all raids.',
     },
     handler: async () => {
-        const fields = Object.keys(raids()).map(k => ({
+        const fields = Object.keys(raids() || []).map(k => ({
                 title: `**__${raids()[k].name}__**`,
                 description: 
 `
-${raids()[k].description || 'No description'}
+:information_source: ${raids()[k].description || 'No description'}
 ${!!raids()[k].day && !!raids()[k].time ? `
-
-__Next raid__
-:watch: ${getNext(raids()[k].day, raids()[k].time)}
+:watch: **Next raid** - ${getNext(raids()[k].day, raids()[k].time)}
 ` : ''}
 `
         }));

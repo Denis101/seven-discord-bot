@@ -40,7 +40,7 @@ module.exports = {
             day,
             time,
         });
-
+        
         if (raidExists(name)) {
             channel().send(createSuccessEmbed(`Created new raid __${name}__`));
         }

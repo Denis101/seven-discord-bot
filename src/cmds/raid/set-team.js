@@ -37,7 +37,7 @@ NOTE: The team name must match the name of the role exactly.
             team,
         });
 
-        if (raid(name).team) {
+        if (raid(name).team === team) {
             channel().send(createSuccessEmbed(`Set team of __${name}__ to __${team}__`));
         }
     },

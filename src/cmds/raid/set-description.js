@@ -16,7 +16,7 @@ module.exports = {
             },
         ],
     },
-    handler: args => {
+    handler: async args => {
         const name = args[0];
         const description = args[1];
 
@@ -29,11 +29,13 @@ module.exports = {
             return;
         }
 
-        updateRaid({
+        await updateRaid({
             name,
             description,
         });
 
-        channel().send(createSuccessEmbed(`Set description of __${name}__ to __${description}__`));
+        if (raid(name).description === description) {
+            channel().send(createSuccessEmbed(`Set description of __${name}__ to __${description}__`));
+        }
     },
 };

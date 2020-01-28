@@ -13,6 +13,6 @@ module.exports = {
         }
 
         await voiceChannel.join();
-        channel().channel.send('-play https://www.youtube.com/watch?v=4SiiRx7GDzI');
+        channel().send('-play https://www.youtube.com/watch?v=4SiiRx7GDzI');
     },
 };

@@ -11,8 +11,9 @@ const asyncAction = (action, actionId, data) => {
             newData = await action(data);
         }
         catch (e) {
-            dispatch({ type: `${actionId}_FAILED`, data, error: e });
-            throw e;
+            dispatch({ type: `${actionId}_FAILED`, data });
+            dispatch({ type: 'ERROR', error: e });
+            return;
         }
 
         dispatch({ type: `${actionId}_COMPLETE`, data: newData ? newData : data });

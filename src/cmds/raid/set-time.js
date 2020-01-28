@@ -26,7 +26,7 @@ module.exports = {
             },
         ],
     },
-    handler: args => {
+    handler: async args => {
         const name = args[0];
         const time = args[1];
 
@@ -39,11 +39,13 @@ module.exports = {
             return;
         }
 
-        updateRaid(name, {
+        await updateRaid({
             name,
             time,
         });
 
-        channel().send(createSuccessEmbed(`Set team of __${name}__ to __${time}__`));
+        if (raid(name).time === time) {
+            channel().send(createSuccessEmbed(`Set team of __${name}__ to __${time}__`));
+        }
     },
 };

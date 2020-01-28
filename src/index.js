@@ -46,20 +46,19 @@ discordClient().on('ready', async () => {
 });
 
 discordClient().on('message', msg => {
-    if (!ready()) {
-        msg.channel.send('I\'m not ready to receive your commands yet. Please wait a sec.');
-        return;
-    }
-
     if (msg.author.id === discordClient().user.id 
         || !userIsReferenced(msg, discordClient().user.id)) {
+        return;
+    }
+    
+    if (!ready()) {
+        msg.channel.send('I\'m not ready to receive your commands yet. Please wait a sec.');
         return;
     }
 
     console.log(`Received command [${msg.content}] from [${msg.author.username}]`);
     setMessage(msg);
     parse(msg.content, HELP_DATA).execute();
-    setMessage(null);
 });
 
 discordClient().login(process.env.DISCORD_TOKEN);
@@ -75,12 +74,17 @@ const errorHandler = e => {
     exitHandler.bind(null, { exit: true });
 };
 
+
 observeStore(state => state.error, error => error && errorHandler(error));
-observeStore(state => state.boot, boot => {
+
+let unsub = null;
+unsub = observeStore(state => state.boot, boot => {
     if (boot.initializing && Object.values(boot.reducers).reduce((a, b) => a && b, true)) {
         console.log('Boot sequence complete.');
         console.log('Listening for commands...');
         initComplete();
+
+        unsub && unsub();
     }
 });
 

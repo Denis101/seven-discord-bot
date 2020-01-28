@@ -29,7 +29,7 @@ module.exports = {
             },
         ],
     },
-    handler: args => {
+    handler: async args => {
         const name = args[0];
         const day = args[1];
 
@@ -42,11 +42,13 @@ module.exports = {
             return;
         }
 
-        updateRaid({
+        await updateRaid({
             name,
-            day,
+            day: day.toLowerCase(),
         });
 
-        channel().send(createSuccessEmbed(`Set day of __${name}__ to __${day}__`));
+        if (raid(name).day === day) {
+            channel().send(createSuccessEmbed(`Set day of __${name}__ to __${day}__`));
+        }
     },
 };
