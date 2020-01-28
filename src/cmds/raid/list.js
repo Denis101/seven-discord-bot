@@ -14,7 +14,7 @@ module.exports = {
                 title: `**__${raids()[k].name}__**`,
                 description: 
 `
-${raids()[k].description}
+${raids()[k].description || 'No description'}
 ${!!raids()[k].day && !!raids()[k].time ? `
 
 __Next raid__
