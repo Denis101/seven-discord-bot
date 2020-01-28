@@ -1,9 +1,11 @@
 const { createTransaction } = require('../transaction.js');
 const store = require('../store');
 
-const wrap = fn => dispatch => fn(dispatch).catch(error => dispatch({ type: 'ERROR', error }));
+const wrap = fn => {
+    return dispatch => fn(dispatch).catch(error => dispatch({ type: 'ERROR', error }));
+};
 
-const createRaidFunc = async raid => {
+const createRaidFunc = raid => {
     return async dispatch => {
         let rowsSql = 'display_name';
         let values = [name];
