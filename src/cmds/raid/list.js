@@ -1,4 +1,5 @@
 const { createListEmbed } = require('../../utils/messageUtils.js');
+const { channel, raids } = require('../../selectors');
 const { getNext } = require('../../utils/dateTimeUtils.js');
 const { guildLeader } = require('../../authenticators.js');
 
