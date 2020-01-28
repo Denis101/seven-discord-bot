@@ -78,10 +78,9 @@ const parse = (input, rootHelpData) => {
     const args = input.trim().split(' ').map(a => a.trim());
     const isHelp = args.length <= 1 || args[args.length - 1] === 'help';
     if (isHelp) {
-        if (args.length <= 1) {
-            const msg = createListEmbed(rootHelpData)
-            const sender = channel().send;
-            return { execute: () => sender(msg) };
+        if (args.length <= 1) { 
+            channel().send(createListEmbed(rootHelpData));
+            return { execute: () => {} };
         }
 
         args.pop();

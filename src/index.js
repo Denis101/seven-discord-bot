@@ -59,6 +59,7 @@ discordClient().on('message', msg => {
     console.log(`Received command [${msg.content}] from [${msg.author.username}]`);
     setMessage(msg);
     parse(msg.content, HELP_DATA).execute();
+    setMessage(null);
 });
 
 discordClient().login(process.env.DISCORD_TOKEN);
@@ -71,7 +72,7 @@ const errorHandler = e => {
     channel() && channel().send(createErrorEmbed(e));
 
     console.error(e);
-    exitHandler.bind(null, { exit:true });
+    exitHandler.bind(null, { exit: true });
 };
 
 observeStore(state => state.error, error => error && errorHandler(error));
