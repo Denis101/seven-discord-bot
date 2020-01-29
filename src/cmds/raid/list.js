@@ -11,10 +11,10 @@ module.exports = {
     },
     handler: async () => {
         const fields = Object.keys(raids() || []).map(k => ({
-                title: `**__${raids()[k].name}__**`,
+                title: `**__${raids()[k].name || raids()[k].slug}__**`,
                 description: 
 `
-:information_source: ${raids()[k].description || 'No description'}
+:information_source:\n${raids()[k].description || 'No description'}
 ${!!raids()[k].day && !!raids()[k].time ? `
 :watch: **Next raid** - ${getNext(raids()[k].day, raids()[k].time)}
 ` : ''}

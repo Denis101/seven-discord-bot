@@ -6,7 +6,7 @@ const { guildLeader } = require('../../authenticators.js');
 module.exports = {
     authenticator: guildLeader,
     help: {
-        title: '@Laty raid set-time <name> <time>',
+        title: '@Laty raid set-time <slug> <time>',
         description: 'Command to update the time during a 24hr period when the raid will start.',
         fields: [
             {
@@ -27,25 +27,25 @@ module.exports = {
         ],
     },
     handler: async args => {
-        const name = args[0];
+        const slug = args[0];
         const time = args[1];
 
-        if (!name) {
-            channel().send(createFailureEmbed("Can't set time, no raid name provided."));
+        if (!slug) {
+            channel().send(createFailureEmbed("Can't set time, no raid slug provided."));
         }
 
-        if (!raidExists(name)) {
-            channel().send(createFailureEmbed(`Can't set time of __${name}__ raid,  it doesn't exist!`));
+        if (!raidExists(slug)) {
+            channel().send(createFailureEmbed(`Can't set time of __${slug}__ raid, it doesn't exist!`));
             return;
         }
 
         await updateRaid({
-            name,
+            slug,
             time,
         });
 
-        if (raid(name).time === time) {
-            channel().send(createSuccessEmbed(`Set team of __${name}__ to __${time}__`));
+        if (raid(slug).time === time) {
+            channel().send(createSuccessEmbed(`Set team of __${slug}__ to __${time}__`));
         }
     },
 };

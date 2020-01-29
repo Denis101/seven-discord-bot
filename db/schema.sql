@@ -3,14 +3,15 @@ CREATE TABLE IF NOT EXISTS raids (
     id SERIAL PRIMARY KEY,
     instance_id NUMERIC,
     team_id NUMERIC,
-    display_name VARCHAR (64) NOT NULL,
-    description VARCHAR (255),
+    slug VARCHAR(64) NOT NULL,
+    display_name VARCHAR (255),
+    description TEXT,
     day VARCHAR(15),
     time VARCHAR(15),
     create_date NUMERIC,
     modified_date NUMERIC,
     delete_date NUMERIC,
-    UNIQUE(id, display_name)
+    UNIQUE(id, slug)
 );
 
 CREATE TABLE IF NOT EXISTS teams (

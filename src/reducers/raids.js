@@ -5,22 +5,22 @@ module.exports = (state = {}, action) => {
 
     switch (action.type) {
         case 'RAIDS_INIT_COMPLETE':
-            return convertToObject(action.data, r => r.name);
+            return convertToObject(action.data, r => r.slug);
         case 'RAID_CREATE_REQUEST':
-            newState[action.data.name] = {};
+            newState[action.data.slug] = {};
             return newState;
         case 'RAID_CREATE_COMPLETE':
-            newState[action.data.name] = action.data;
+            newState[action.data.slug] = action.data;
             return newState;
         case 'RAID_UPDATE_COMPLETE':
-            newState[action.data.name] = {
-                ...newState[action.data.name],
+            newState[action.data.slug] = {
+                ...newState[action.data.slug],
                 ...action.data,
             };
             return newState;
         case 'RAID_CREATE_FAILED':
         case 'RAID_REMOVE':
-            delete newState[action.data.name];
+            delete newState[action.data.slug];
             return newState;
         case 'RAID_UPDATE_REQUEST':
         case 'RAID_UPDATE_FAILED':

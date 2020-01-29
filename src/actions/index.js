@@ -9,7 +9,7 @@ module.exports = {
     ...teamActions,
     init: () => {
         store.dispatch({ type: 'INIT' });
-
+        
         raidActions.init();
         characterActions.init();
         teamActions.init();

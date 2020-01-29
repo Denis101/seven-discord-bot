@@ -73,9 +73,63 @@ const getChainLink = (cmd, args) => {
     return link;
 };
 
+const parseArgs = input => {
+    const getArgs = line => {
+        let isQuote = false;
+        let current = '';
+        const quotedArgs = [];
+
+        [...line].forEach(c => {
+            if (c === '"') {
+                isQuote = !isQuote;
+                if (isQuote === true) {
+                    current = '';
+                }
+                else {
+                    quotedArgs.push(current);
+                }
+
+                return;
+            }
+
+            if (isQuote) {
+                current += c;
+            }
+        });
+
+        quotedArgs.forEach((a, i) => line = line.replace(`"${a}"`, i));
+        const args = line.trim().split(' ').filter(a => !!a);
+
+        if (quotedArgs.length > 0) {
+            for (let i = 0; i < args.length; i++) {
+                const idx = parseInt(args[i]);
+                if (isNaN(idx)) {
+                    continue;
+                }
+    
+                args[i] = quotedArgs[idx];
+            }
+        }
+
+        return args;
+    };
+
+    let args = [];
+    if (input.includes('\n')) {
+        const lines = input.split('\n');
+        const line1 = lines.shift();
+        args = [...getArgs(line1), lines.join('\n')];
+    }
+    else {
+        args = getArgs(input);
+    }
+    
+    return args;
+};
+
 const parse = (input, rootHelpData) => {
     let cmds = commands();
-    const args = input.trim().split(' ').map(a => a.trim());
+    const args = parseArgs(input);
 
     // First arg is always the root cmd
     args.shift();

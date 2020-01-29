@@ -7,8 +7,8 @@ module.exports = {
     dbClient: () => store.getState().dbClient,
     discordClient: () => store.getState().discordClient,
     guild: () => store.getState().message.guild,
-    raidExists: name => Object.keys(store.getState().raids).includes(name),
-    raid: name => store.getState().raids[name],
+    raidExists: slug => Object.keys(store.getState().raids).includes(slug),
+    raid: slug => store.getState().raids[slug],
     raids: () => store.getState().raids,
     // TODO: compare dates to now
     nextRaid: () => store.getState().raids[Object.keys(store.getState().raids)[0]],

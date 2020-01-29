@@ -6,7 +6,7 @@ const { guildLeader } = require('../../authenticators.js');
 module.exports = {
     authenticator: guildLeader,
     help: {
-        title: '@Laty raid create <name> [day] [time]',
+        title: '@Laty raid create <slug> [day] [time] "[name]"',
         description: 'Command to create a new raid.',
         fields: [
             {
@@ -22,27 +22,29 @@ module.exports = {
         ],
     },
     handler: async args => {
-        const name = args[0];
+        const slug = args[0];
         const day = args[1];
         const time = args[2];
+        const name = args[3];
 
-        if (!name) {
-            channel().send(createFailureEmbed('A name is required to create a raid.'));
+        if (!slug) {
+            channel().send(createFailureEmbed('A slug is required to create a raid.'));
         }
 
-        if (raidExists(name)) {
-            channel().send(createFailureEmbed('A raid with this name already exists.\nDid you mean \'@Laty raid update\'?'));
+        if (raidExists(slug)) {
+            channel().send(createFailureEmbed('A raid with this slug already exists.\nDid you mean \'@Laty raid update\'?'));
             return;
         }
 
         await createRaid({
-            name,
+            slug,
             day,
             time,
+            name,
         });
-        
-        if (raidExists(name)) {
-            channel().send(createSuccessEmbed(`Created new raid __${name}__`));
+
+        if (raidExists(slug)) {
+            channel().send(createSuccessEmbed(`Created new raid __${slug}__`));
         }
     },
 }

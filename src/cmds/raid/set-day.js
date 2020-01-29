@@ -6,7 +6,7 @@ const { guildLeader } = require('../../authenticators.js');
 module.exports = {
     authenticator: guildLeader,
     help: {
-        title: '@Laty raid set-day <name> <day>',
+        title: '@Laty raid set-day <slug> <day>',
         description: 'Command to update the day of the week of a raid.',
         fields: [
             {
@@ -30,25 +30,25 @@ module.exports = {
         ],
     },
     handler: async args => {
-        const name = args[0];
+        const slug = args[0];
         const day = args[1];
 
-        if (!name) {
-            channel().send(createFailureEmbed("Can't set day, no raid name provided."));
+        if (!slug) {
+            channel().send(createFailureEmbed("Can't set day, no raid slug provided."));
         }
 
-        if (!raidExists(name)) {
-            channel().send(createFailureEmbed(`Can't set day of __${name}__ raid, it doesn't exist!`));
+        if (!raidExists(slug)) {
+            channel().send(createFailureEmbed(`Can't set day of __${slug}__ raid, it doesn't exist!`));
             return;
         }
 
         await updateRaid({
-            name,
+            slug,
             day: day.toLowerCase(),
         });
 
-        if (raid(name).day === day) {
-            channel().send(createSuccessEmbed(`Set day of __${name}__ to __${day}__`));
+        if (raid(slug).day === day) {
+            channel().send(createSuccessEmbed(`Set day of __${slug}__ to __${day}__`));
         }
     },
 };
