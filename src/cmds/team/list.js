@@ -1,9 +1,9 @@
 const { createListEmbed } = require('../../utils/messageUtils.js');
 const { channel, teams } = require('../../selectors');
-const { guildLeader } = require('../../authenticators.js');
+const { raider } = require('../../authenticators.js');
 
 module.exports = {
-    authenticator: guildLeader,
+    authenticator: raider,
     help: {
         title: '@Laty team list',
         description: 'Lists all teams.',
@@ -12,7 +12,7 @@ module.exports = {
         const fields = Object.keys(teams() || [])
             .map(k => {
                 const name = teams()[k].name;
-                return `${'**' + name + '** - ' || ''}${teams()[k].slug}`;   
+                return `${name ? '**' + name + '** - ' : ''}${teams()[k].slug}`;   
             });
 
         const title = fields.length > 0
