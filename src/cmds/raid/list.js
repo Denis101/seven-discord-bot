@@ -17,7 +17,7 @@ module.exports = {
                 const hasDayAndTime = !!raids()[k].day && !!raids()[k].time;
                 const name = raids()[k].name;
                 const timeUntil = getTime(raids()[k].day, raids()[k].time, raids()[k].frequencyWeeks);
-                return `**${name || ''}** - ${raids()[k].slug}${hasDayAndTime ? ` - :watch: Next raid ${timeUntil}` : ''}`;   
+                return `${'**' + name + '** - ' || ''}${raids()[k].slug}${hasDayAndTime ? ` - :watch: Next raid ${timeUntil}` : ''}`;   
             });
 
         const title = fields.length > 0

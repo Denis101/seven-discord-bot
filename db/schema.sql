@@ -1,9 +1,9 @@
 
 CREATE TABLE IF NOT EXISTS raids (
     id SERIAL PRIMARY KEY,
+    slug VARCHAR(64) NOT NULL,
     instance_id NUMERIC,
     team_id NUMERIC,
-    slug VARCHAR(64) NOT NULL,
     display_name VARCHAR (255),
     description TEXT,
     day VARCHAR(15),
@@ -26,14 +26,14 @@ CREATE TABLE IF NOT EXISTS raid_logs (
 
 CREATE TABLE IF NOT EXISTS teams (
     id SERIAL PRIMARY KEY,
-    role_id VARCHAR (64) NOT NULL,
     slug VARCHAR(64) NOT NULL,
+    role_id VARCHAR (64),
     display_name VARCHAR(255),
     discord_channel VARCHAR(255),
     create_date NUMERIC,
     modified_date NUMERIC,
     delete_date NUMERIC,
-    UNIQUE(id, role_id)
+    UNIQUE(id, slug, role_id)
 );
 
 CREATE TABLE IF NOT EXISTS characters (
