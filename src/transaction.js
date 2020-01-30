@@ -7,7 +7,7 @@ const getParamIndex = i => {
 };
 
 const toDb = (data, mappings, type) => {
-    const newData = remapKeys(convertToObject(data, d => d.slug), mappings);
+    const newData = remapKeys(data, mappings);
     switch (type) {
         case 'insert':
             return {
@@ -40,7 +40,7 @@ const withSimpleWhereClause = (query, obj, mappings) => {
     const startIndex = query.values ? query.values.length : 0;
 
     return {
-        sql: `${query.sql} WHERE ${keys.map((k, i) => `${toDb(k, mappings)} = ${getParamIndex(startIndex + i)}`).join(',')}`,
+        sql: `${query.sql} WHERE ${keys.map((k, i) => `${mappings ? toDb(k, mappings) : k} = ${getParamIndex(startIndex + i)}`).join(',')}`,
         values: query.values ? [...query.values, ...values] : values,
     };
 };
@@ -54,34 +54,46 @@ const createQueryWrapper = (fn, args) => {
 }
 
 const getSelectQuery = (table, keys, mappings) => {
-    const fn = (t, k, m) => ({
-        sql: `SELECT ${!k || k.length < 1 ? '*' : k.map(m).join(',')} FROM ${t}`,
-    });
+    const fn = (t, k, m) => {
+        if (!k || k.length < 1) {
+            return {
+                sql: `SELECT * FROM ${t}`
+            };
+        }
 
-    return createQueryWrapper(fn, [table, keys, k => toDb(k, mappings)]);
+        const ks = !!m ? k.map(m) : k;
+        return {
+            sql: `SELECT ${ks.join(',')} FROM ${t}`,
+        };
+    };
+
+    const mapper = mappings ? k => toDb(k, mappings) : null;
+    return createQueryWrapper(fn, [table, keys, mapper]);
 };
 
 const getInsertQuery = (table, obj, mappings) => {
     const fn = (t, o, m) => {
+        o = m(o);
         const ks = Object.keys(o).filter(k => !!o[k]);
         return {
-            sql: `INSERT INTO ${t} (${ks.map(m).join(',')}) VALUES (${ks.map((_, i) => getParamIndex(i)).join(',')})`,
+            sql: `INSERT INTO ${t} (${ks.join(',')}) VALUES (${ks.map((_, i) => getParamIndex(i)).join(',')})`,
             values: ks.map(k => o[k]),
         };
     };
 
-    return createQueryWrapper(fn, [table, obj, k => toDb(k, mappings, 'insert')]);
+    return createQueryWrapper(fn, [table, obj, o => toDb(o, mappings, 'insert')]);
 };
 
 const getUpdateQuery = (table, obj, mappings) => {
     const fn = (t, o, m) => {
+        o = m(o);
         const ks = Object.keys(o).filter(k => !!o[k]);
         return {
-            sql: `UPDATE ${t} SET ${ks.map((k, i) => `${m(k)} = ${getParamIndex(i)}`).join(',')}`,
+            sql: `UPDATE ${t} SET ${ks.map((k, i) => `${k} = ${getParamIndex(i)}`).join(',')}`,
             values: ks.map(k => o[k]),
         };
     };
-    return createQueryWrapper(fn, [table, obj, k => toDb(k, mappings, 'update')]);
+    return createQueryWrapper(fn, [table, obj, o => toDb(o, mappings, 'update')]);
 };
 
 const executeQuery = async (query, mappings) => {
@@ -90,10 +102,14 @@ const executeQuery = async (query, mappings) => {
     }
 
     const res = await dbClient().query(query.sql, query.values || null);
+    if (res.rows.length < 1) {
+        return null;
+    }
+
     if (!mappings) {
         return res.rows;
     }
-
+    
     return convertToObject(res.rows.map(r => fromDb(r, mappings)), r => r.slug);
 };
 

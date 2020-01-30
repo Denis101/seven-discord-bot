@@ -8,10 +8,11 @@ module.exports = {
     dbClient: () => store.getState().dbClient,
     discordClient: () => store.getState().discordClient,
     guild: () => store.getState().message.guild,
-    raidExists: slug => Object.keys(store.getState().raids).includes(slug),
     raid: slug => store.getState().raids[slug],
     raids: () => store.getState().raids,
+    raidExists: slug => Object.keys(store.getState().raids).includes(slug),
     team: slug => store.getState().teams[slug],
     teams: () => store.getState().teams,
+    teamExists: slug => Object.keys(store.getState().teams).includes(slug),
     nextRaid: () => store.getState().raids[Object.keys(store.getState().raids)[0]],
 };
