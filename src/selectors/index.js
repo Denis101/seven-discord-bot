@@ -11,5 +11,7 @@ module.exports = {
     raidExists: slug => Object.keys(store.getState().raids).includes(slug),
     raid: slug => store.getState().raids[slug],
     raids: () => store.getState().raids,
+    team: slug => store.getState().teams[slug],
+    teams: () => store.getState().teams,
     nextRaid: () => store.getState().raids[Object.keys(store.getState().raids)[0]],
 };

@@ -1,7 +1,4 @@
+const { setterReducer } = require('../utils/reducerUtils.js');
 module.exports = (state = null, action) => {
-    if (action.type === 'ERROR') {
-        return action.error;
-    }
-
-    return null;
+    return setterReducer('ERROR', state, action);
 };

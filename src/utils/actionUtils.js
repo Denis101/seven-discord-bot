@@ -2,7 +2,7 @@ const { date } = require('../utils/dateTimeUtils.js');
 const { transaction, executeQuery, getInsertQuery, getUpdateQuery, getSelectQuery } = require('../transaction.js');
 
 const wrap = fn => {
-    return dispatch => fn(dispatch).catch(error => dispatch({ type: 'ERROR', error }));
+    return dispatch => fn(dispatch).catch(error => dispatch({ type: 'ERROR_SET', error }));
 };
 
 const asyncAction = (action, actionId, data) => {
@@ -15,7 +15,7 @@ const asyncAction = (action, actionId, data) => {
         }
         catch (e) {
             dispatch({ type: `${actionId.toUpperCase()}_FAILED`, data });
-            dispatch({ type: 'ERROR', error: e });
+            dispatch({ type: 'ERROR_SET', error: e });
             return;
         }
 

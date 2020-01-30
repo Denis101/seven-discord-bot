@@ -29,6 +29,7 @@ module.exports = {
 
         if (!slug) {
             channel().send(createFailureEmbed('A slug is required to create a raid.'));
+            return;
         }
 
         if (raidExists(slug)) {

@@ -1,7 +1,4 @@
+const { setterReducer } = require('../utils/reducerUtils.js');
 module.exports = (state = null, action) => {
-    if (action.type === 'DISCORD_CLIENT_SET') {
-        return action.client;
-    }
-
-    return state;
+    return setterReducer('DISCORD_CLIENT', state, action);
 };

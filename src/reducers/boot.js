@@ -4,7 +4,7 @@ module.exports = (state = {
     reducers: {
         dbClient: false,
         discordClient: false,
-        characters: true,
+        characters: false,
         raids: false,
         teams: false,
     },

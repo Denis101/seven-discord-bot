@@ -4,7 +4,7 @@ const { channel } = require('../selectors');
 module.exports = {
     directory: __dirname + '/team',
     help: {
-        title: '@Laty team',
+        title: '@Laty team <subcommand> [args]',
         description: `
 Command to manage raid teams.
 NOTE: The team name must match the name of the role exactly.
@@ -34,7 +34,7 @@ NOTE: The team name must match the name of the role exactly.
     },
     handler: (args, next) => {
         if (args.length < 1) {
-            channel().send('Missing subcommand for raid-team command');
+            channel().send('@Laty team: missing subcommand');
             return;
         }
 

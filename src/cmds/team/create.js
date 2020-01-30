@@ -1,17 +1,25 @@
 const { createSuccessEmbed, createFailureEmbed } = require('../../utils/messageUtils.js');
-const { channel, team, teamExists } = require('../../selectors');
-const { updateTeam } = require('../../actions');
+const { channel, teamExists } = require('../../selectors');
+const { createTeam } = require('../../actions');
 const { guildLeader } = require('../../authenticators.js');
 
 module.exports = {
     authenticator: guildLeader,
     help: {
-        title: '@Laty team ask-roles <slug>',
-        description: 'Command to ask raiders for their team roles',
+        title: '@Laty team create <slug> [roleId] [channel]',
+        description: 'Command to add a new raid team',
+        fields: [
+            {
+                title: 'Example',
+                description: '@Laty team add EU',
+                inline: false,
+            },
+        ],
     },
     handler: async args => {
         const slug = args[0];
-        const discordChannel = args[1];
+        const roleId = args[1];
+        const discordChannel = args[2];
 
         if (!slug) {
             channel().send(createFailureEmbed('A slug is required to create a team'));
@@ -23,13 +31,14 @@ module.exports = {
             return;
         }
 
-        await updateTeam({
+        await createTeam({
             slug,
-            discordChannel
+            roleId,
+            discordChannel,
         });
 
-        if (team(slug).discordChannel === discordChannel) {
-            channel().send(createSuccessEmbed(`Set channel of __${slug}__ to **${discordChannel}**`));
+        if (teamExists(slug)) {
+            channel().send(createSuccessEmbed(`Created new team __${slug}__`));
         }
     },
 };

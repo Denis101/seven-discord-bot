@@ -11,22 +11,19 @@ module.exports = {
         store.dispatch({ type: 'INIT' });
         await raidActions.init();
         await teamActions.init();
+        await characterActions.init();
     },
     initComplete: () => store.dispatch({ type: 'INIT_COMPLETE' }),
-    setReady: () => store.dispatch({
-        type: 'READY_SET',
-        ready: true,
-    }),
     setDbClient: client => store.dispatch({
         type: 'DB_CLIENT_SET',
-        client,
+        data: client,
     }),
     setDiscordClient: client => store.dispatch({
         type: 'DISCORD_CLIENT_SET',
-        client,
+        data: client,
     }),
     setMessage: message => store.dispatch({
         type: 'MESSAGE_SET',
-        message,
+        data: message,
     }),
 };

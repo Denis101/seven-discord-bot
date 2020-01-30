@@ -6,12 +6,12 @@ const { guildLeader } = require('../../authenticators.js');
 module.exports = {
     authenticator: guildLeader,
     help: {
-        title: '@Laty team ask-roles <slug>',
-        description: 'Command to ask raiders for their team roles',
+        title: '@Laty team set-role <slug> <roleId>',
+        description: 'Command to set the role of a team',
     },
     handler: async args => {
         const slug = args[0];
-        const discordChannel = args[1];
+        const roleId = args[0];
 
         if (!slug) {
             channel().send(createFailureEmbed('A slug is required to create a team'));
@@ -25,11 +25,11 @@ module.exports = {
 
         await updateTeam({
             slug,
-            discordChannel
+            roleId
         });
 
-        if (team(slug).discordChannel === discordChannel) {
-            channel().send(createSuccessEmbed(`Set channel of __${slug}__ to **${discordChannel}**`));
+        if (team(slug).roleId === roleId) {
+            channel().send(createSuccessEmbed(`Updated roleId of __${slug}__`));
         }
     },
 };
