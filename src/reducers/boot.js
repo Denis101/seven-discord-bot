@@ -4,7 +4,7 @@ module.exports = (state = {
     reducers: {
         dbClient: false,
         discordClient: false,
-        characters: false,
+        characters: true,
         raids: false,
         teams: false,
     },
@@ -31,7 +31,7 @@ module.exports = (state = {
                     discordClient: true,
                 },
             };
-        case 'CHARACTERS_INIT_COMPLETE':
+        case 'CHARACTER_INIT_COMPLETE':
             return {
                 ...state,
                 reducers: {
@@ -39,7 +39,7 @@ module.exports = (state = {
                     characters: true,
                 },
             };
-        case 'RAIDS_INIT_COMPLETE':
+        case 'RAID_INIT_COMPLETE':
             return {
                 ...state,
                 reducers: {
@@ -47,7 +47,7 @@ module.exports = (state = {
                     raids: true,
                 },
             };
-        case 'TEAMS_INIT_COMPLETE':
+        case 'TEAM_INIT_COMPLETE':
             return {
                 ...state,
                 reducers: {

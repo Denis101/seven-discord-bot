@@ -20,11 +20,11 @@ module.exports = {
         const slug = args[0];
         const name = args[1];
 
-        if (!name) {
+        if (!slug) {
             channel().send(createFailureEmbed("Can't set name, no raid slug provided."));
         }
 
-        if (!raidExists(name)) {
+        if (!raidExists(slug)) {
             channel().send(createFailureEmbed(`Can't set name of __${slug}__ raid, it doesn't exist!`));
             return;
         }

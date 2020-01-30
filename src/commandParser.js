@@ -97,12 +97,16 @@ const parseArgs = input => {
             }
         });
 
-        quotedArgs.forEach((a, i) => line = line.replace(`"${a}"`, i));
+        quotedArgs.forEach((a, i) => line = line.replace(`"${a}"`, `"${i}"`));
         const args = line.trim().split(' ').filter(a => !!a);
 
         if (quotedArgs.length > 0) {
             for (let i = 0; i < args.length; i++) {
-                const idx = parseInt(args[i]);
+                if (!args[i].startsWith('"') && !args[i].endsWith('"')) {
+                    continue;
+                }
+                
+                const idx = parseInt(args[i].replace('"', ''));
                 if (isNaN(idx)) {
                     continue;
                 }
@@ -123,7 +127,7 @@ const parseArgs = input => {
     else {
         args = getArgs(input);
     }
-    
+
     return args;
 };
 

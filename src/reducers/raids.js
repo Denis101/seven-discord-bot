@@ -1,11 +1,9 @@
-const { convertToObject } = require('../utils/arrayUtils.js');
-
 module.exports = (state = {}, action) => {
     const newState = { ...state };
 
     switch (action.type) {
-        case 'RAIDS_INIT_COMPLETE':
-            return convertToObject(action.data, r => r.slug);
+        case 'RAID_INIT_COMPLETE':
+            return action.data;
         case 'RAID_CREATE_REQUEST':
             newState[action.data.slug] = {};
             return newState;

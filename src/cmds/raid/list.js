@@ -1,7 +1,10 @@
+const moment = require('moment');
 const { createListEmbed } = require('../../utils/messageUtils.js');
 const { channel, raids } = require('../../selectors');
 const { getNext } = require('../../utils/dateTimeUtils.js');
 const { guildLeader } = require('../../authenticators.js');
+
+const getTime = (day, time) => `**${moment().to(getNext(day, time))}**  ${getNext(day, time).calendar()}`;
 
 module.exports = {
     authenticator: guildLeader,
@@ -10,16 +13,13 @@ module.exports = {
         description: 'Lists all raids.',
     },
     handler: async () => {
-        const fields = Object.keys(raids() || []).map(k => ({
-                title: `**__${raids()[k].name || raids()[k].slug}__**`,
-                description: 
-`
-:information_source:\n${raids()[k].description || 'No description'}
-${!!raids()[k].day && !!raids()[k].time ? `
-:watch: **Next raid** - ${getNext(raids()[k].day, raids()[k].time)}
-` : ''}
-`
-        }));
+        const fields = Object.keys(raids() || [])
+            .map(k => {
+                const hasDayAndTime = !!raids()[k].day && !!raids()[k].time;
+                const name = raids()[k].name || raids()[k].slug;
+                const timeUntil = getTime(raids()[k].day, raids()[k].time, raids()[k].frequencyWeeks);
+                return `**__${name}__**${hasDayAndTime ? ` - :watch: Next raid ${timeUntil}` : ''}`;   
+            });
 
         const title = fields.length > 0
             ? 'Here\'s a list of all the raids I\'m managing'
@@ -27,8 +27,7 @@ ${!!raids()[k].day && !!raids()[k].time ? `
 
         channel().send(createListEmbed({
             title,
-            description: '',
-            fields,
+            description: fields.join('\n'),
         }));
     },
 }

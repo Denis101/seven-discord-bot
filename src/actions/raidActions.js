@@ -1,82 +1,23 @@
-const moment = require('moment');
-const { transaction, executeQuery, getInsertQuery, getUpdateQuery, getSelectQuery } = require('../transaction.js');
 const { store } = require('../store');
-const { wrap, asyncAction } = require('../utils/actionUtils.js');
+const { wrap, asyncAction, asyncDbInitAction, asyncDbCreateAction, asyncDbUpdateAction } = require('../utils/actionUtils.js');
 
-const mapKeyToDb = key => {
-    switch (key) {
-        case 'instance':
-            return 'instance_id';
-        case 'team':
-            return 'team_id';
-        case 'name':
-            return 'display_name';
-        case 'createDate':
-            return 'create_date';
-        case 'modifiedDate':
-            return 'modified_date';
-        default:
-            return key;
-    }
+const MAPPINGS = {
+    instance: 'instance_id',
+    team: 'team_id',
+    name: 'display_name',
+    frequencyDays: 'frequency_days',
+    frequencyWeeks: 'frequency_weeks',
 };
 
-const initFunc = async dispatch => {
-    const res = await transaction({ sql: 'SELECT * FROM raids' });
+const markRaidCompleteFunc = raid => {
+    return asyncAction(async raid => {
 
-    dispatch({
-        type: 'RAIDS_INIT_COMPLETE',
-        data: res.rows.map(r => ({
-            id: r.id,
-            slug: r.slug,
-            name: r.display_name,
-            description: r.description,
-            day: r.day,
-            time: r.time,
-        })),
     });
 };
 
-const createRaidFunc = raid => {
-    return asyncAction(async raid => {
-        const res = await transaction(async () => {
-            await executeQuery(getInsertQuery('raids', {
-                ...raid,
-                createDate: moment().unix(),
-            }, mapKeyToDb));
-
-            return await executeQuery(
-                getSelectQuery('raids', ['id'])
-                    .withSimpleWhereClause({ slug: raid.slug }, mapKeyToDb));
-        });
-
-        return {
-            ...raid,
-            id: res.rows[0].id,
-        };
-    }, 'RAID_CREATE', raid);
-};
-
-const updateRaidFunc = raid => {
-    return asyncAction(async raid => {
-        const raidCopy = { 
-            ...raid,
-            modifiedDate: moment().unix(),
-        };
-
-        delete raidCopy['id'];
-
-        await transaction(
-            getUpdateQuery('raids', raidCopy, mapKeyToDb)
-                .withSimpleWhereClause({ slug: raid.slug }, mapKeyToDb));
-    }, 'RAID_UPDATE', raid);
-};
-
 module.exports = {
-    init: () => store.dispatch(wrap(initFunc)),
-    createRaid: raid => store.dispatch(wrap(createRaidFunc(raid))),
-    updateRaid: raid => store.dispatch(wrap(updateRaidFunc(raid))),
-    removeRaid: name => store.dispatch({
-        type: 'RAID_REMOVE',
-        name,
-    }),
+    init: () => store.dispatch(asyncDbInitAction('raid', MAPPINGS)),
+    createRaid: data => store.dispatch(asyncDbCreateAction('raid', data, MAPPINGS)),
+    updateRaid: data => store.dispatch(asyncDbUpdateAction('raid', data, MAPPINGS)),
+    markRaidComplete: data => store.dispatch(wrap(markRaidCompleteFunc(data))),
 };

@@ -1,19 +1,12 @@
-const { transaction } = require('../transaction.js');
 const { store } = require('../store');
-const { wrap } = require('../utils/actionUtils.js');
+const { asyncDbInitAction, asyncDbCreateAction, asyncDbUpdateAction } = require('../utils/actionUtils.js');
 
-const initFunc = async dispatch => {
-    const res = await transaction({ sql: 'SELECT * FROM teams' });
-    dispatch({
-        type: 'TEAMS_INIT_COMPLETE',
-        teams: res.rows.map(r => r.display_name),
-    });
+const MAPPINGS = {
+    name: 'display_name',
 };
 
 module.exports = {
-    init: () => store.dispatch(wrap(initFunc)),
-    addTeam: team => store.dispatch({
-        type: 'TEAM_ADD',
-        team,
-    }),
+    init: () => store.dispatch(asyncDbInitAction('team', MAPPINGS)),
+    createTeam: data => store.dispatch(asyncDbCreateAction('team', data, MAPPINGS)),
+    updateTeam: data => store.dispatch(asyncDbUpdateAction('team', data, MAPPINGS)),
 };

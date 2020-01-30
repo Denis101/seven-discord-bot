@@ -7,12 +7,10 @@ module.exports = {
     ...raidActions,
     ...characterActions,
     ...teamActions,
-    init: () => {
+    init: async () => {
         store.dispatch({ type: 'INIT' });
-        
-        raidActions.init();
-        characterActions.init();
-        teamActions.init();
+        await raidActions.init();
+        await teamActions.init();
     },
     initComplete: () => store.dispatch({ type: 'INIT_COMPLETE' }),
     setReady: () => store.dispatch({

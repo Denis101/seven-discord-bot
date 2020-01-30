@@ -42,7 +42,7 @@ discordClient().on('ready', async () => {
     });
 
     setDbClient(await pool.connect());
-    init();
+    await init();
 });
 
 discordClient().on('message', msg => {

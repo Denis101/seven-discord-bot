@@ -8,16 +8,28 @@ CREATE TABLE IF NOT EXISTS raids (
     description TEXT,
     day VARCHAR(15),
     time VARCHAR(15),
+    frequency_weeks NUMERIC,
+    frequency_days NUMERIC,
     create_date NUMERIC,
     modified_date NUMERIC,
     delete_date NUMERIC,
     UNIQUE(id, slug)
 );
 
+CREATE TABLE IF NOT EXISTS raid_logs (
+    id SERIAL PRIMARY KEY,
+    raid_id NUMERIC,
+    completion_date NUMERIC,
+    warcraftlogs_url VARCHAR(255),
+    UNIQUE(id, raid_id)
+);
+
 CREATE TABLE IF NOT EXISTS teams (
     id SERIAL PRIMARY KEY,
     role_id VARCHAR (64) NOT NULL,
-    display_name VARCHAR(64),
+    slug VARCHAR(64) NOT NULL,
+    display_name VARCHAR(255),
+    discord_channel VARCHAR(255),
     create_date NUMERIC,
     modified_date NUMERIC,
     delete_date NUMERIC,

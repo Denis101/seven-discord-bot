@@ -1,15 +1,15 @@
 module.exports = (state = [], action) => {
     switch (action.type) {
-        case 'TEAMS_INIT_COMPLETE':
-            return action.teams;
+        case 'TEAM_INIT_COMPLETE':
+            return action.data;
         case 'TEAM_ADD':
             return [
                 ...state,
-                action.team,
+                action.data,
             ];
         case 'TEAM_REMOVE':
             const newState = [...state];
-            newState.indexOf(action.team) > -1 && newState.splice(newState.indexOf(team), 1);
+            newState.indexOf(action.data) > -1 && newState.splice(newState.indexOf(data), 1);
             return newState;
         default:
             return state;
