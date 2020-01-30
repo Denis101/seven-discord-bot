@@ -57,7 +57,7 @@ const asyncDbUpdateAction = (type, data, mappings) => {
         delete dataCopy['id'];
         return await transaction(
             getUpdateQuery(`${type}s`, dataCopy, mappings)
-                .withSimpleWhereClause({ slug: data.slug }, mappings), mappings);
+                .withSimpleWhereClause({ slug: data.slug }), mappings);
     }, `${type.toUpperCase()}_UPDATE`, data);
 }
 

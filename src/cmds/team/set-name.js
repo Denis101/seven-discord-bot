@@ -11,15 +11,15 @@ module.exports = {
     },
     handler: async args => {
         const slug = args[0];
-        const name = args[0];
+        const name = args[1];
 
         if (!slug) {
             channel().send(createFailureEmbed('A slug is required to create a team'));
             return;
         }
 
-        if (teamExists(slug)) {
-            channel().send(createFailureEmbed('A team with this slug already exists. Did you mean \'@Laty team update\'?'));
+        if (!teamExists(slug)) {
+            channel().send(createFailureEmbed(`Can't set name of __${slug}__ team, it doesn't exist!`));
             return;
         }
 
@@ -28,7 +28,7 @@ module.exports = {
             name
         });
 
-        if (team(slug).roleId === roleId) {
+        if (team(slug).name === name) {
             channel().send(createSuccessEmbed(`Set name of __${slug}__ to __${name}__`));
         }
     },

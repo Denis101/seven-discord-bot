@@ -4,8 +4,8 @@ const { team, guild } = require('../../selectors');
 
 module.exports = {
     help: {
-        title: '@Laty team ask-roles <slug>',
-        description: 'Command to ask raiders for their team roles',
+        title: '@Laty team ask-classes <slug>',
+        description: 'Command to ask raiders for their team classes',
     },
     handler: async args => {
         const slug = args[0];

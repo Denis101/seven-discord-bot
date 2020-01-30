@@ -1,5 +1,5 @@
 const { createSuccessEmbed, createFailureEmbed } = require('../../utils/messageUtils.js');
-const { channel, raid, raidExists } = require('../../selectors');
+const { channel, raid, raidExists, team, teams } = require('../../selectors');
 const { updateRaid } = require('../../actions');
 const { guildLeader } = require('../../authenticators.js');
 
@@ -21,7 +21,7 @@ NOTE: The team name must match the name of the role exactly.
     },
     handler: async args => {
         const slug = args[0];
-        const team = args[1];
+        const teamSlug = args[1];
 
         if (!slug) {
             channel().send(createFailureEmbed("Can't set team, no raid slug provided."));
@@ -34,11 +34,11 @@ NOTE: The team name must match the name of the role exactly.
 
         await updateRaid({
             slug,
-            team,
+            team: team(teamSlug).id,
         });
 
-        if (raid(slug).team === team) {
-            channel().send(createSuccessEmbed(`Set team of __${slug}__ to __${team}__`));
+        if (raid(slug).team === team(teamSlug).id) {
+            channel().send(createSuccessEmbed(`Set team of __${slug}__ to __${teamSlug}__`));
         }
     },
 };

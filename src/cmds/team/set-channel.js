@@ -18,8 +18,8 @@ module.exports = {
             return;
         }
 
-        if (teamExists(slug)) {
-            channel().send(createFailureEmbed('A team with this slug already exists. Did you mean \'@Laty team update\'?'));
+        if (!teamExists(slug)) {
+            channel().send(createFailureEmbed(`Can't set channel of __${slug}__ team, it doesn't exist!`));
             return;
         }
 

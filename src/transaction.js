@@ -100,7 +100,7 @@ const executeQuery = async (query, mappings) => {
     if (!dbClient()) {
         throw 'No open db connection';
     }
-
+    
     const res = await dbClient().query(query.sql, query.values || null);
     if (res.rows.length < 1) {
         return null;
@@ -109,7 +109,7 @@ const executeQuery = async (query, mappings) => {
     if (!mappings) {
         return res.rows;
     }
-    
+
     return convertToObject(res.rows.map(r => fromDb(r, mappings)), r => r.slug);
 };
 
