@@ -1,4 +1,4 @@
-const moment = require('moment');
+const { date, getUnix } = require('./utils/dateTimeUtils.js');
 const { convertToObject, remapKeys, invert } = require('./utils/arrayUtils.js');
 const { dbClient } = require('./selectors');
 
@@ -12,12 +12,12 @@ const toDb = (data, mappings, type) => {
         case 'insert':
             return {
                 ...newData,
-                create_date: moment().unix(),
+                create_date: date().unix(),
             };
         case 'update':
             return {
                 ...newData,
-                modified_date: moment().unix(),
+                modified_date: date().unix(),
             };
         default:
             return newData;
@@ -29,8 +29,8 @@ const fromDb = (data, mappings) => {
 
     return {
         ...newData,
-        createDate: data.create_date ? moment.unix(data.create_date) : null,
-        modifiedDate: data.modified_date ? moment.unix(data.modified_date) : null,
+        createDate: data.create_date ? getUnix(data.create_date) : null,
+        modifiedDate: data.modified_date ? getUnix(data.modified_date) : null,
     };
 };
 

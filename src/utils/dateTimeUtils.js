@@ -1,6 +1,14 @@
-const moment = require('moment');
+const moment = require('moment-timezone');
 
 const is24hr = time => !time.includes('am') && !time.includes('pm');
+
+const date = () => {
+    return moment().tz('America/New_York');
+}
+
+const getUnix = timestamp => {
+    return moment.unix(timestamp).tz('America/New_York');
+}
 
 const parseTime = time => {
     let format = '';
@@ -26,12 +34,6 @@ const parseTime = time => {
 const getNext = (dayString, timeString, freqWeeks, createDate) => {
     const time = parseTime(timeString);
     const dateTime = time.isoWeekday(dayString);
-
-    console.log('time: ', time.format());
-    console.log('time and day: ', dateTime.format());
-    console.log('current date: ', moment().format());
-    console.log(`current date + ${freqWeeks || 1} week(s)`, moment().add(freqWeeks || 1).format());
-
     if (moment() > dateTime) {
         return dateTime.add(freqWeeks || 1, 'w')
     }
@@ -41,4 +43,6 @@ const getNext = (dayString, timeString, freqWeeks, createDate) => {
 
 module.exports = {
     getNext,
+    date,
+    getUnix,
 };

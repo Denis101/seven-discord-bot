@@ -1,10 +1,9 @@
-const moment = require('moment');
 const { createListEmbed } = require('../../utils/messageUtils.js');
 const { channel, raids } = require('../../selectors');
-const { getNext } = require('../../utils/dateTimeUtils.js');
+const { date, getNext } = require('../../utils/dateTimeUtils.js');
 const { guildLeader } = require('../../authenticators.js');
 
-const getTime = (day, time) => `**${moment().to(getNext(day, time))}**  ${getNext(day, time).calendar()}`;
+const getTime = (day, time) => `**${date().to(getNext(day, time))}** (${getNext(day, time).format('MMM Do h:mma')} PST)`;
 
 module.exports = {
     authenticator: guildLeader,
@@ -18,7 +17,7 @@ module.exports = {
                 const hasDayAndTime = !!raids()[k].day && !!raids()[k].time;
                 const name = raids()[k].name || raids()[k].slug;
                 const timeUntil = getTime(raids()[k].day, raids()[k].time, raids()[k].frequencyWeeks);
-                return `**__${name}__**${hasDayAndTime ? ` - :watch: Next raid ${timeUntil}` : ''}`;   
+                return `**${name}**${hasDayAndTime ? ` - :watch: Next raid ${timeUntil}` : ''}`;   
             });
 
         const title = fields.length > 0

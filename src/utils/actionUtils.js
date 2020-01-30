@@ -1,4 +1,4 @@
-const moment = require('moment');
+const { date } = require('../utils/dateTimeUtils.js');
 const { transaction, executeQuery, getInsertQuery, getUpdateQuery, getSelectQuery } = require('../transaction.js');
 
 const wrap = fn => {
@@ -34,7 +34,7 @@ const asyncDbCreateAction = (type, data, mappings) => {
         const res = await transaction(async () => {
             await executeQuery(getInsertQuery(table, {
                 ...data,
-                createDate: moment().unix(),
+                createDate: date().unix(),
             }, mappings));
 
             return await executeQuery(
@@ -53,7 +53,7 @@ const asyncDbUpdateAction = (type, data, mappings) => {
     return asyncAction(async data => {
         const dataCopy = {
             ...data,
-            modifiedDate: moment().unix(),
+            modifiedDate: date().unix(),
         };
 
         delete dataCopy['id'];
