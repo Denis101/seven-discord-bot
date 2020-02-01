@@ -7,6 +7,16 @@ const getParamIndex = i => {
 };
 
 const toDb = (data, mappings, type) => {
+    const updateData = { ...data };
+
+    if (updateData.createDate) {
+        delete updateData.createDate;
+    }
+
+    if (updateData.modifiedDate) {
+        delete updateData.modifiedDate;
+    }
+
     const newData = remapKeys(data, mappings);
     switch (type) {
         case 'insert':
@@ -33,13 +43,25 @@ const fromDb = (data, mappings) => {
     };
 };
 
-const withSimpleWhereClause = (query, obj, mappings) => {
+const where = (query, obj) => {
     const keys = Object.keys(obj).filter(k => !!obj[k]);
     const values = keys.map(k => obj[k]);
     const startIndex = query.values ? query.values.length : 0;
 
     return {
-        sql: `${query.sql} WHERE ${keys.map((k, i) => `${mappings ? toDb(k, mappings) : k} = ${getParamIndex(startIndex + i)}`).join(',')}`,
+        sql: `${query.sql} WHERE ${keys.map((k, i) => `${k} = ${getParamIndex(startIndex + i)}`).join(',')}`,
+        values: query.values ? [...query.values, ...values] : values,
+    };
+};
+
+const whereMapped = (query, obj, mappings) => {
+    const newObj = remapKeys(data, mappings);
+    const keys = Object.keys(newObj).filter(k => !!obj[k]);
+    const values = keys.map(k => obj[k]);
+    const startIndex = query.values ? query.values.length : 0;
+
+    return {
+        sql: `${query.sql} WHERE ${keys.map((k, i) => `${k} = ${getParamIndex(startIndex + i)}`).join(',')}`,
         values: query.values ? [...query.values, ...values] : values,
     };
 };
@@ -48,7 +70,8 @@ const createQueryWrapper = (fn, args) => {
     const q = fn.apply(null, args);
     return {
         ...q,
-        withSimpleWhereClause: (o, m) => withSimpleWhereClause(q, o, m),
+        where: o => where(q, o),
+        whereMapped: (o, m) => whereMapped(q, o, m),
     };
 }
 

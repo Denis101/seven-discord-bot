@@ -16,7 +16,7 @@ module.exports = {
     teams: () => store.getState().teams,
     teamExists: slug => Object.keys(store.getState().teams).includes(slug),
     character: slug => store.getState().characters[slug],
-    characterByUserId: userId => store.getState().characters.find(c => c.userId === userId),
+    characterByUserId: userId => Object.values(store.getState().characters).find(c => c.userId === userId),
     characters: () => store.getState().characters,
     characterExists: slug => Object.keys(store.getState().characters).includes(slug),
     nextRaid: () => store.getState().raids[Object.keys(store.getState().raids)[0]],

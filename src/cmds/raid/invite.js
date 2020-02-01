@@ -1,6 +1,6 @@
 const { guild } = require('../../selectors');
 const { getRaidRole, getRaidRoleMessage } = require('../../utils/roleUtils.js');
-const { guildLeader, raidLeader } = require('../../services/authenticator');
+const { guildLeader, raidLeader } = require('../../services/authenticator.js');
 
 module.exports = {
     help: {

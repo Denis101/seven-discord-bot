@@ -1,7 +1,7 @@
 const { createSuccessEmbed, createFailureEmbed } = require('../../utils/messageUtils.js');
 const { channel, team, teamExists } = require('../../selectors');
 const { updateTeam } = require('../../actions');
-const { guildLeader } = require('../../services/authenticator');
+const { guildLeader } = require('../../services/authenticator.js');
 
 module.exports = {
     authenticator: guildLeader,

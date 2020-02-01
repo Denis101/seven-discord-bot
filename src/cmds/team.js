@@ -16,8 +16,8 @@ NOTE: The team name must match the name of the role exactly.
                 inline: false,
             },
             {
-                title: '__add__',
-                description: 'Adds a raid team.',
+                title: '__create__',
+                description: 'Creates a raid team.',
                 inline: true
             },
             {
@@ -28,6 +28,21 @@ NOTE: The team name must match the name of the role exactly.
             {
                 title: '__remove__',
                 description: 'Removes a raid team.',
+                inline: true
+            },
+            {
+                title: '__set-channel__',
+                description: 'Sets the discord channel for notifications for this team.',
+                inline: true
+            },
+            {
+                title: '__set-name__',
+                description: 'Sets the name of this team.',
+                inline: true
+            },
+            {
+                title: '__set-role__',
+                description: 'Sets the discord role of this team.',
                 inline: true
             },
         ]

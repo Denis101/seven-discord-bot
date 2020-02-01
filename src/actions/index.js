@@ -12,6 +12,8 @@ const cacheMessage = async (channel, team, type) => {
         const msg = await channel.fetchMessage(msgId);
         channel.messages.set(msgId, msg);
     }
+
+    return !!msgId;
 }
 
 module.exports = {

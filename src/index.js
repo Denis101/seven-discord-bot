@@ -5,7 +5,7 @@ const { Pool } = require('pg');
 
 const { userIsReferenced } = require('./utils/userUtils.js');
 const { createErrorEmbed } = require('./utils/messageUtils.js');
-const { ready, discordClient, dbClient, channel } = require('./selectors');
+const { ready, discordClient, dbClient, guild } = require('./selectors');
 const { parse } = require('./services/commandParser.js');
 const { observeStore } = require('./store');
 
@@ -110,15 +110,26 @@ const exitHandler = () => {
     dbClient() && dbClient().release();
 };
 
-const errorHandler = e => {
-    channel() && channel().send(createErrorEmbed(e));
+const errorHandler = async e => {
+    const errorChannel = 'laty-errors';
+    let channel = guild().channels.find(c => c.name === errorChannel);
+    if (!channel) {
+        channel = await guild().createChannel('laty-errors', { type: 'text' }, [
+            {
+                id: guild().defaultRole.id,
+                deny: ['VIEW_CHANNEL', 'READ_MESSAGES', 'READ_MESSAGE_HISTORY'],
+            }
+        ]);
+    }
+
+    channel.send(createErrorEmbed(e));
 
     console.error(e);
     exitHandler.bind(null, { exit: true });
 };
 
 
-observeStore(state => state.error, error => error && errorHandler(error));
+observeStore(state => state.error, async error => error && await errorHandler(error));
 
 let unsub = null;
 unsub = observeStore(state => state.boot, boot => {

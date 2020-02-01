@@ -1,7 +1,7 @@
 const { createSuccessEmbed, createFailureEmbed } = require('../../utils/messageUtils.js');
-const { channel, teamExists } = require('../../selectors');
+const { channel, team, teamExists } = require('../../selectors');
 const { createTeam } = require('../../actions');
-const { guildLeader } = require('../../services/authenticator');
+const { guildLeader } = require('../../services/authenticator.js');
 
 module.exports = {
     authenticator: guildLeader,
@@ -39,6 +39,12 @@ module.exports = {
 
         if (teamExists(slug)) {
             channel().send(createSuccessEmbed(`Created new team __${slug}__`));
+
+            if (discordChannel) {
+                await teamService.createCharClassMessage(team(slug));
+                await teamService.createCharRoleMessage(team(slug));
+                await teamService.createCharRoleMessaage(team(slug));
+            }
         }
     },
 };

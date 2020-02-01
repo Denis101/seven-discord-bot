@@ -5,13 +5,13 @@ const YES_NO_MAP = require('../constant/yesNoConstants.js');
 const { CHARACTER_MAPPINGS } = require('../constant/dbConstants.js');
 
 const { store } = require('../store');
+const { guild, team, characters, characterByUserId } = require('../selectors');
 
-const { asyncDbAction, asyncDbInitAction } = require('../utils/actionUtils.js');
 const { getNickname } = require('../utils/userUtils.js');
 const { objectKey } = require('../utils/arrayUtils.js');
 
+const { asyncDbAction, asyncDbInitAction } = require('../services/actionService.js');
 const { executeQuery, getInsertQuery, getUpdateQuery } = require('../services/dbService.js');
-const { guild, team, characters, characterByUserId } = require('../selectors');
 
 const mapCharFlags = (char, emoji) => {
     let value = objectKey(CLASS_EMOJI_MAP, emoji);
@@ -84,7 +84,7 @@ const mapExisting = (teamSlug, emoji, member) => {
 const updateExisting = async chars => {
     await chars.forEach(async c => {
         const query = getUpdateQuery('characters', c, CHARACTER_MAPPINGS)
-            .withSimpleWhereClause({ userId: c.userId });
+            .where({ user_id: c.userId });
 
         await executeQuery(query, CHARACTER_MAPPINGS);
     });

@@ -2,6 +2,7 @@
 CREATE TABLE IF NOT EXISTS raids (
     id SERIAL PRIMARY KEY,
     slug VARCHAR(64) NOT NULL,
+    guild_id VARCHAR (64),
     instance_id NUMERIC,
     team_id NUMERIC,
     display_name VARCHAR (255),
@@ -27,9 +28,11 @@ CREATE TABLE IF NOT EXISTS raid_logs (
 CREATE TABLE IF NOT EXISTS teams (
     id SERIAL PRIMARY KEY,
     slug VARCHAR(64) NOT NULL,
+    guild_id VARCHAR (64),
     role_id VARCHAR (64),
     display_name VARCHAR(255),
     discord_channel VARCHAR(255),
+    raid_leader_id NUMERIC,
     create_date NUMERIC,
     modified_date NUMERIC,
     delete_date NUMERIC,
@@ -60,6 +63,7 @@ CREATE TABLE IF NOT EXISTS characters (
 
 CREATE TABLE IF NOT EXISTS character_assignments (
     id SERIAL PRIMARY KEY,
+    guild_id VARCHAR (64),
     type VARCHAR (50) NOT NULL,
     character_id NUMERIC NOT NULL,
     spell_id NUMERIC NOT NULL,
@@ -117,6 +121,7 @@ CREATE TABLE IF NOT EXISTS instances (
 
 CREATE TABLE IF NOT EXISTS instance_debuff_slots (
     id SERIAL PRIMARY KEY,
+    guild_id VARCHAR (64),
     instance_id NUMERIC,
     debuff_slot_1 NUMERIC,
     debuff_slot_2 NUMERIC,

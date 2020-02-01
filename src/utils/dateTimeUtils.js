@@ -31,7 +31,7 @@ const parseTime = time => {
     return moment(time, format);
 };
 
-const getNext = (dayString, timeString, freqWeeks, createDate) => {
+const getNext = (dayString, timeString, freqWeeks) => {
     const time = parseTime(timeString);
     const dateTime = time.isoWeekday(dayString);
     if (moment() > dateTime) {

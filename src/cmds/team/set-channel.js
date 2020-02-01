@@ -1,7 +1,9 @@
 const { createSuccessEmbed, createFailureEmbed } = require('../../utils/messageUtils.js');
-const { channel, team, teamExists } = require('../../selectors');
+const { discordClient, channel, team, teamExists } = require('../../selectors');
 const { updateTeam } = require('../../actions');
-const { guildLeader } = require('../../services/authenticator');
+
+const { guildLeader } = require('../../services/authenticator.js');
+const teamService = require('../../services/teamService.js');
 
 module.exports = {
     authenticator: guildLeader,
@@ -23,6 +25,8 @@ module.exports = {
             return;
         }
 
+        const oldChannel = discordClient().channels.find(c => c.name === team(slug).discordChannel);
+
         await updateTeam({
             slug,
             discordChannel
@@ -30,6 +34,14 @@ module.exports = {
 
         if (team(slug).discordChannel === discordChannel) {
             channel().send(createSuccessEmbed(`Set channel of __${slug}__ to **${discordChannel}**`));
+
+            if (oldChannel) {
+                discordClient().channelDelete(oldChannel);
+            }
+            
+            await teamService.createCharClassMessage(team(slug));
+            await teamService.createCharRoleMessage(team(slug));
+            await teamService.createCharMainMessage(team(slug));
         }
     },
 };

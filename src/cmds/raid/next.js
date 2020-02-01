@@ -1,8 +1,12 @@
-const { RichEmbed } = require('discord.js');
+const { CLASS_MAP } = require('../../constant/classConstants.js');
+
 const { createFailureEmbed } = require('../../utils/messageUtils.js');
-const { guild, channel, raid, nextRaid } = require('../../selectors');
 const { hasRole, getRaidRole, getMembersInTeam } = require('../../utils/roleUtils.js');
 const { getNickname } = require('../../utils/userUtils.js');
+
+const { guild, channel, raid, nextRaid } = require('../../selectors');
+
+const { RichEmbed } = require('discord.js');
 
 module.exports = {
     help: {
