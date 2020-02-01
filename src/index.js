@@ -6,7 +6,7 @@ const { Pool } = require('pg');
 const { userIsReferenced } = require('./utils/userUtils.js');
 const { createErrorEmbed } = require('./utils/messageUtils.js');
 const { ready, discordClient, dbClient, channel } = require('./selectors');
-const { parse } = require('./commandParser.js');
+const { parse } = require('./services/commandParser.js');
 const { observeStore } = require('./store');
 
 const { 

@@ -1,7 +1,7 @@
 const { createSuccessEmbed, createFailureEmbed } = require('../../utils/messageUtils.js');
 const { channel, raidExists } = require('../../selectors');
 const { createRaid } = require('../../actions');
-const { guildLeader } = require('../../authenticators.js');
+const { guildLeader } = require('../../service/authenticator.js');
 
 module.exports = {
     authenticator: guildLeader,
@@ -43,7 +43,7 @@ module.exports = {
             time,
             name,
         });
-        
+
         if (raidExists(slug)) {
             channel().send(createSuccessEmbed(`Created new raid __${slug}__`));
         }

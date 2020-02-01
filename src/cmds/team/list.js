@@ -1,6 +1,6 @@
 const { createListEmbed } = require('../../utils/messageUtils.js');
 const { channel, teams } = require('../../selectors');
-const { raider } = require('../../authenticators.js');
+const { raider } = require('../../services/authenticator.js');
 
 module.exports = {
     authenticator: raider,

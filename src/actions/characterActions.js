@@ -10,7 +10,7 @@ const { asyncDbAction, asyncDbInitAction } = require('../utils/actionUtils.js');
 const { getNickname } = require('../utils/userUtils.js');
 const { objectKey } = require('../utils/arrayUtils.js');
 
-const { executeQuery, getInsertQuery, getUpdateQuery } = require('../transaction.js');
+const { executeQuery, getInsertQuery, getUpdateQuery } = require('../services/dbService.js');
 const { guild, team, characters, characterByUserId } = require('../selectors');
 
 const mapCharFlags = (char, emoji) => {

@@ -1,7 +1,7 @@
 const { createListEmbed } = require('../../utils/messageUtils.js');
 const { channel, raids } = require('../../selectors');
 const { date, getNext } = require('../../utils/dateTimeUtils.js');
-const { raider } = require('../../authenticators.js');
+const { raider } = require('../../services/authenticator');
 
 const getTime = (day, time) => `**${date().to(getNext(day, time))}** (${getNext(day, time).format('MMM Do h:mma')} PST)`;
 

@@ -1,6 +1,6 @@
 const fs = require('fs');
-const { channel, author, guild } = require('./selectors');
-const { createListEmbed, createFailureEmbed } = require('./utils/messageUtils.js');
+const { channel, author, guild } = require('../selectors');
+const { createListEmbed, createFailureEmbed } = require('../utils/messageUtils.js');
 
 const build = cmdDef => {
     const cmd = {

@@ -1,6 +1,6 @@
-const { date, getUnix } = require('./utils/dateTimeUtils.js');
-const { convertToObject, remapKeys, invert } = require('./utils/arrayUtils.js');
-const { dbClient } = require('./selectors');
+const { date, getUnix } = require('../utils/dateTimeUtils.js');
+const { convertToObject, remapKeys, invert } = require('../utils/arrayUtils.js');
+const { dbClient } = require('../selectors');
 
 const getParamIndex = i => {
     return `$${i+1}`;

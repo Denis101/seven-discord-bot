@@ -1,4 +1,4 @@
-const { transaction, executeQuery, getInsertQuery, getUpdateQuery, getSelectQuery } = require('../transaction.js');
+const { transaction, executeQuery, getInsertQuery, getUpdateQuery, getSelectQuery } = require('../services/dbService.js');
 
 const wrap = fn => {
     return dispatch => fn(dispatch).catch(error => dispatch({ type: 'ERROR_SET', error }));
