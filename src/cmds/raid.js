@@ -62,8 +62,8 @@ module.exports = {
                 inline: true
             },
             {
-                title: '__status__',
-                description: 'Gets the raider status of the next raid.',
+                title: '__next__',
+                description: 'Gets the status of the next raid.',
                 inline: true
             },
             {

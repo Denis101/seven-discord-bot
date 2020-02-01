@@ -6,12 +6,16 @@ const { getNickname } = require('../../utils/userUtils.js');
 
 module.exports = {
     help: {
-        title: '@Laty raid status <name>',
-        description: 'Command to print the status of all raiders for a given raid.',
+        title: '@Laty raid next <name>',
+        description: 'Command to print the status of all raiders for the next raid.',
         fields: [
             {
-                title: 'Example',
-                description: '@Laty raid status molten-core',
+                title: 'Example 1',
+                description: '@Laty raid next',
+            },
+            {
+                title: 'Example 2',
+                description: '@Laty raid next molten-core',
             },
         ],
     },
