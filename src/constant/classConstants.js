@@ -1,5 +1,8 @@
+const { switchKey } = require('../utils/arrayUtils.js');
+
 const CLASS_MAP = {
     'Warlock': {
+        name: 'Warlock',
         rangedDps: true,
         meleeDps: false,
         healer: false,
@@ -9,6 +12,7 @@ const CLASS_MAP = {
     },
     'Priest': {
         rangedDps: true,
+        name: 'Priest',
         meleeDps: false,
         healer: true,
         tank: false,
@@ -16,6 +20,7 @@ const CLASS_MAP = {
         text: ':innocent:',
     },
     'Mage': {
+        name: 'Mage',
         rangedDps: true,
         meleeDps: false,
         healer: false,
@@ -24,6 +29,7 @@ const CLASS_MAP = {
         text: ':milk:',
     },
     'Warrior': {
+        name: 'Warrior',
         rangedDps: true,
         meleeDps: true,
         healer: false,
@@ -32,6 +38,7 @@ const CLASS_MAP = {
         text: ':crossed_swords:',
     },
     'Paladin': {
+        name: 'Paladin',
         rangedDps: false,
         meleeDps: true,
         healer: true,
@@ -40,6 +47,7 @@ const CLASS_MAP = {
         text: ':flashlight:',
     },
     'Druid': {
+        name: 'Druid',
         rangedDps: true,
         meleeDps: true,
         healer: true,
@@ -48,6 +56,7 @@ const CLASS_MAP = {
         text: ':smiley_cat:',
     },
     'Hunter': {
+        name: 'Hunter',
         rangedDps: true,
         meleeDps: false,
         healer: false,
@@ -56,6 +65,7 @@ const CLASS_MAP = {
         text: ':bow_and_arrow:',
     },
     'Rogue': {
+        name: 'Rogue',
         rangedDps: false,
         meleeDps: true,
         healer: false,
@@ -72,4 +82,5 @@ module.exports = {
     HEALERS: Object.keys(CLASS_MAP).filter(k => CLASS_MAP[k].healer),
     TANKS: Object.keys(CLASS_MAP).filter(k => CLASS_MAP[k].tank),
     CLASS_MAP,
+    CLASS_EMOJI_MAP: switchKey(CLASS_MAP, o => o.emoji),
 };

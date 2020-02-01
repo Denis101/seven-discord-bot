@@ -45,11 +45,18 @@ CREATE TABLE IF NOT EXISTS characters (
     is_tank BOOLEAN,
     is_healer BOOLEAN,
     is_main BOOLEAN,
+    name_pending BOOLEAN,
     create_date NUMERIC,
     modified_date NUMERIC,
     delete_date NUMERIC,
     UNIQUE(id, user_id, display_name)
 );
+
+-- CREATE TABLE IF NOT EXISTS team_characters (
+--     id SERIAL PRIMARY KEY,
+--     team_id NUMERIC,
+--     character_id NUMERIC
+-- );
 
 CREATE TABLE IF NOT EXISTS character_assignments (
     id SERIAL PRIMARY KEY,

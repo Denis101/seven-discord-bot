@@ -17,7 +17,7 @@ const rootReducer = (state = {}, action) => {
     reducers.forEach(r => {
         newState[r.name] = r.handler(state[r.name], action);
     });
-
+    
     return newState;
 }
 

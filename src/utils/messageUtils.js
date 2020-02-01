@@ -12,6 +12,10 @@ const createListEmbed = opts => {
         });
     }
 
+    if (opts.footer) {
+        embed.setFooter(opts.footer);
+    }
+
     return embed;
 }
 

@@ -61,10 +61,17 @@ const asyncDbUpdateAction = (type, data, mappings) => {
     }, `${type.toUpperCase()}_UPDATE`, data);
 }
 
+const asyncDbAction = (fn, type, actionName) => {
+    return asyncAction(async () => {
+        return await transaction(fn);
+    }, `${type.toUpperCase()}_${actionName.toUpperCase()}`);
+}
+
 module.exports = {
     wrap,
     asyncAction: (action, actionId, data) => wrap(asyncAction(action, actionId, data)),
     asyncDbInitAction: (type, mappings) => asyncDbInitAction(type, mappings),
     asyncDbCreateAction: (type, data, mappings) => wrap(asyncDbCreateAction(type, data, mappings)),
     asyncDbUpdateAction: (type, data, mappings) => wrap(asyncDbUpdateAction(type, data, mappings)),
+    asyncDbAction: (fn, type, actionName) => wrap(asyncDbAction(fn, type, actionName)),
 };

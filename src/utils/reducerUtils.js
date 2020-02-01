@@ -1,25 +1,31 @@
-const dataReducer = (type, state, action) => {
+const dataReducer = (type, state, action, keyGetter) => {
     const newState = { ...state };
 
     switch (action.type) {
         case `${type}_INIT_COMPLETE`:
             return action.data;
         case `${type}_CREATE_REQUEST`:
-            newState[action.data.slug] = {};
+            newState[keyGetter(action.data)] = {};
             return newState;
         case `${type}_CREATE_COMPLETE`:
-            newState[action.data.slug] = action.data;
+            newState[keyGetter(action.data)] = action.data;
             return newState;
         case `${type}_UPDATE_COMPLETE`:
-            newState[action.data.slug] = {
-                ...newState[action.data.slug],
+            newState[keyGetter(action.data)] = {
+                ...newState[keyGetter(action.data)],
                 ...action.data,
             };
             return newState;
         case `${type}_CREATE_FAILED`:
         case `${type}_REMOVE`:
-            delete newState[action.data.slug];
+            delete newState[keyGetter(action.data)];
             return newState;
+        case `${type}_SET`:
+        case `${type}_UNSET`:
+            return {
+                ...state,
+                ...action.data,
+            };
         case `${type}_UPDATE_REQUEST`:
         case `${type}_UPDATE_FAILED`:
         default:

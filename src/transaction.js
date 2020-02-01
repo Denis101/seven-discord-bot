@@ -26,7 +26,6 @@ const toDb = (data, mappings, type) => {
 
 const fromDb = (data, mappings) => {
     const newData = remapKeys(data, invert(mappings));
-
     return {
         ...newData,
         createDate: data.create_date ? getUnix(data.create_date) : null,
@@ -110,7 +109,7 @@ const executeQuery = async (query, mappings) => {
         return res.rows;
     }
 
-    return convertToObject(res.rows.map(r => fromDb(r, mappings)), r => r.slug);
+    return convertToObject(res.rows.map(r => fromDb(r, mappings)), mappings.keyGetter);
 };
 
 const isFunction = obj => !!(obj && obj.constructor && obj.call && obj.apply);

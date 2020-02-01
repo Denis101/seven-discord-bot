@@ -1,13 +1,11 @@
-const { CLASS_MAP } = require('../../constant/classConstants.js');
 const { createListEmbed } = require('../../utils/messageUtils.js');
 const { team, guild } = require('../../selectors');
-const guildService = require('../../services/guildService.js');
 const redisService = require('../../services/redisService.js');
 
 module.exports = {
     help: {
-        title: '@Laty team ask-classes <slug>',
-        description: 'Command to ask raiders for their team classes',
+        title: '@Laty team ask-main <slug>',
+        description: 'Command to ask raiders for their main character',
     },
     handler: async args => {
         const slug = args[0];
@@ -19,18 +17,22 @@ module.exports = {
 
         //channel.send(`<@&${team(slug).roleId}>`);
 
-        const msgId = `class.${slug}`;
+        const msgId = `main.${slug}`;
         const msg = createListEmbed({
             title: `${team(slug).name}`,
             footer: msgId,
-            description:`React with your class
-            
-${Object.keys(CLASS_MAP).map(k => `${CLASS_MAP[k].text} for ${k}`).join('\n')}
+            description:`Is this your main?
+     
+:green_circle: for Yes
+
+:red_circle: for No
             `
         });
 
         const message = await channel.send(msg);
-        Object.keys(CLASS_MAP).forEach(k => message.react(CLASS_MAP[k].emoji));
+        message.react('🟢');
+        message.react('🔴');
+
         await redisService.set(msgId, message.id);
     },
 };

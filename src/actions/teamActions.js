@@ -1,14 +1,9 @@
 const { store } = require('../store');
 const { asyncDbInitAction, asyncDbCreateAction, asyncDbUpdateAction } = require('../utils/actionUtils.js');
-
-const MAPPINGS = {
-    roleId: 'role_id',
-    name: 'display_name',
-    discordChannel: 'discord_channel',
-};
+const { TEAM_MAPPINGS } = require('../constant/dbConstants.js');
 
 module.exports = {
-    init: () => store.dispatch(asyncDbInitAction('team', MAPPINGS)),
-    createTeam: data => store.dispatch(asyncDbCreateAction('team', data, MAPPINGS)),
-    updateTeam: data => store.dispatch(asyncDbUpdateAction('team', data, MAPPINGS)),
+    init: () => store.dispatch(asyncDbInitAction('team', TEAM_MAPPINGS)),
+    createTeam: data => store.dispatch(asyncDbCreateAction('team', data, TEAM_MAPPINGS)),
+    updateTeam: data => store.dispatch(asyncDbUpdateAction('team', data, TEAM_MAPPINGS)),
 };

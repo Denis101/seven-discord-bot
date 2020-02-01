@@ -1,13 +1,6 @@
 const { store } = require('../store');
 const { wrap, asyncAction, asyncDbInitAction, asyncDbCreateAction, asyncDbUpdateAction } = require('../utils/actionUtils.js');
-
-const MAPPINGS = {
-    instance: 'instance_id',
-    team: 'team_id',
-    name: 'display_name',
-    frequencyDays: 'frequency_days',
-    frequencyWeeks: 'frequency_weeks',
-};
+const { RAID_MAPPINGS } = require('../constant/dbConstants.js');
 
 const markRaidCompleteFunc = raid => {
     return asyncAction(async raid => {
@@ -16,8 +9,8 @@ const markRaidCompleteFunc = raid => {
 };
 
 module.exports = {
-    init: () => store.dispatch(asyncDbInitAction('raid', MAPPINGS)),
-    createRaid: data => store.dispatch(asyncDbCreateAction('raid', data, MAPPINGS)),
-    updateRaid: data => store.dispatch(asyncDbUpdateAction('raid', data, MAPPINGS)),
+    init: () => store.dispatch(asyncDbInitAction('raid', RAID_MAPPINGS)),
+    createRaid: data => store.dispatch(asyncDbCreateAction('raid', data, RAID_MAPPINGS)),
+    updateRaid: data => store.dispatch(asyncDbUpdateAction('raid', data, RAID_MAPPINGS)),
     markRaidComplete: data => store.dispatch(wrap(markRaidCompleteFunc(data))),
 };

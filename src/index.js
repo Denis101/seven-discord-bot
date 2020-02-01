@@ -1,14 +1,24 @@
 #!/usr/bin/env node
 const Discord = require('discord.js');
-
+const redis = require('redis');
 const { Pool } = require('pg');
 
 const { userIsReferenced } = require('./utils/userUtils.js');
 const { createErrorEmbed } = require('./utils/messageUtils.js');
 const { ready, discordClient, dbClient, channel } = require('./selectors');
-const { init, initComplete, setDiscordClient, setDbClient, setMessage } = require('./actions');
 const { parse } = require('./commandParser.js');
 const { observeStore } = require('./store');
+
+const { 
+    init, 
+    initComplete, 
+    setDiscordClient, 
+    setDbClient, 
+    setRedisClient, 
+    setMessage,
+    setCharacters,
+    unsetCharacters,
+} = require('./actions');
 
 const HELP_DATA = {
     title: '@Laty <command>',
@@ -42,6 +52,7 @@ discordClient().on('ready', async () => {
     });
 
     setDbClient(await pool.connect());
+    setRedisClient(redis.createClient(process.env.REDIS_URL));
     await init();
 });
 
@@ -60,6 +71,38 @@ discordClient().on('message', msg => {
     setMessage(msg);
     parse(msg.content, HELP_DATA).execute();
 });
+
+const shouldExitReaction = (reaction, user) => {
+    return user.bot
+        || !reaction 
+        || !reaction.message 
+        || !reaction.message.embeds 
+        || !reaction.message.embeds[0]
+        || !reaction.message.embeds[0].footer
+        || !reaction.message.embeds[0].footer.text;
+}
+
+discordClient().on('messageReactionAdd', (reaction, user) => {
+    if (shouldExitReaction(reaction, user) || !ready()) {
+        return;
+    }
+
+    setMessage(reaction.message);
+    const footer = reaction.message.embeds[0].footer.text;
+    args = footer.split('.');
+    setCharacters(args[1], reaction.emoji.name, reaction.users);
+});
+
+discordClient().on('messageReactionRemove', (reaction, user) => {
+    if (shouldExitReaction(reaction, user) || !ready()) {
+        return;
+    }
+
+    setMessage(reaction.message);
+    const footer = reaction.message.embeds[0].footer.text;
+    args = footer.split('.');
+    unsetCharacters(args[1], reaction.emoji.name, reaction.users);
+})
 
 discordClient().login(process.env.DISCORD_TOKEN);
 

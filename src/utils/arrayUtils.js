@@ -27,8 +27,27 @@ const remapKeys = (data, mappings) => {
     return result;
 };
 
+const switchKey = (data, keyGetter) => {
+    const result = {};
+    Object.keys(data).forEach(k => {
+        const nk = keyGetter(data[k]);
+        result[nk || k] = data[k];
+    });
+    return result;
+};
+
+const objectKey = (obj, key) => {
+    if (!Object.keys(obj).includes(key)) {
+        return null;
+    }
+
+    return obj[key];
+};
+
 module.exports = {
     convertToObject,
     invert,
     remapKeys,
+    switchKey,
+    objectKey,
 };
